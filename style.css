@@ -1,4 +1,127 @@
-p {
-  color: blue;
-  font-size: 18px;
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px; /* This sets the base size for rem units */
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+  padding: 1.25rem; /* 1.25rem = 20px */
+}
+
+/* Header */
+header {
+  background-color: #4682B4; /* Darker blue */
+  color: white;
+  text-align: center;
+  padding: 1.25rem 0;
+  margin-bottom: 1.875rem; /* 30px */
+}
+
+header h1 {
+  font-size: 2.5rem; /* Equivalent to 40px */
+  font-weight: 600;
+}
+
+/* Main Content */
+main {
+  max-width: 50rem; /* Equivalent to 800px */
+  margin: 0 auto;
+  background-color: white;
+  padding: 1.25rem; /* Equivalent to 20px */
+  border-radius: 0.5rem; /* Equivalent to 8px */
+  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1); /* 0.625rem = 10px */
+}
+
+main h2 {
+  font-size: 2rem; /* Equivalent to 32px */
+  margin-top: 1.25rem; /* Equivalent to 20px */
+  color: #4682B4; /* Darker blue */
+  border-bottom: 0.125rem solid #4682B4; /* 0.125rem = 2px */
+  padding-bottom: 0.3125rem; /* 0.3125rem = 5px */
+}
+
+main h3 {
+  font-size: 1.8rem; /* Equivalent to 28.8px */
+  margin-top: 1.25rem;
+  color: #333;
+}
+
+main h4 {
+  font-size: 1.5rem; /* Equivalent to 24px */
+  margin-top: 1.25rem;
+}
+
+main h5 {
+  font-size: 1.2rem; /* Equivalent to 19.2px */
+  font-weight: 600;
+  color: #555;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+main p {
+  margin-bottom: 1rem; /* Equivalent to 16px */
+  font-size: 1.1rem; /* Equivalent to 17.6px */
+  line-height: 1.8;
+}
+
+main a {
+  color: #4682B4; /* Darker blue */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+main a:hover {
+  text-decoration: underline;
+}
+
+/* Skills Section */
+main .skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* Adds space between the skill items */
+  justify-content: space-around;
+  margin-bottom: 2rem;
+}
+
+main .skills li {
+  background-color: #4682B4; /* Darker blue */
+  color: white;
+  padding: 0.625rem 1rem; /* Equivalent to 10px 16px */
+  margin-top: 1.25rem;
+  border-radius: 0.3125rem; /* Equivalent to 5px */
+  font-size: 1rem; /* 16px */
+  flex: 1 1 calc(33% - 1rem); /* Adjusts each skill item to take up 33% of the container */
+  text-align: center;
+  box-shadow: 0 0 0.25rem rgba(0, 0, 0, 0.1); /* Adds a slight shadow for better presentation */
+}
+
+/* Style for the GitHub link using an id */
+#github-link {
+  margin-top: 1.25rem;
+  color: #4682B4; /* Darker blue */
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 1.875rem; /* Equivalent to 30px */
+  padding: 0.625rem 0; /* Equivalent to 10px */
+  background-color: #333;
+  color: white;
+  font-size: 0.9rem; /* Equivalent to 14.4px */
+  border-radius: 0.5rem; /* Equivalent to 8px */
+}
+
+footer p {
+  margin: 0;
 }
