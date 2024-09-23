@@ -143,10 +143,11 @@ main .skills li {
 }
 
 /* Style for the GitHub link using an id */
-#github-link {
+.contact-link {
   margin-top: 2vw;
   color: #4682B4;
   font-size: clamp(1rem, 3.5vw, 1.25rem); /* Min: 1rem, Max: 1.25rem */
+  margin-right: 1vw;
 }
 
 /* Footer */
