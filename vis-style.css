@@ -89,3 +89,17 @@ svg {
   font-size: 14px;
   fill: #333;
 }
+
+.art-container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.spirals {
+  width: 66.67%; /* Two-thirds of the container */
+  height: auto;
+}
+
