@@ -6,7 +6,7 @@
 }
 
 html {
-  font-size: 100%; /* Base font size remains 100%, but we'll use clamp for scaling */
+  font-size: 100%;
 }
 
 body {
@@ -14,7 +14,6 @@ body {
   background-color: #f4f4f4;
   color: #333;
   line-height: 1.6;
-  padding: 2vw; /* Responsive padding */
 }
 
 /* Header */
@@ -53,7 +52,7 @@ main h3, h4, h5 {
 }
 
 main h5 {
-  font-style: italic; /* Italicized text */
+  font-style: italic; 
 }
 
 #major-minor {
@@ -63,7 +62,7 @@ main h5 {
 
 #projects-content {
   /* margin-top: 1vw; */
-  display: none; /* Hide education content by default */
+  display: none; /* Hide projects content by default */
 }
 
 /* Button Style */

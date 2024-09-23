@@ -1,0 +1,52 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+}
+
+header {
+  background-color: #4682B4;
+  color: white;
+  text-align: center;
+  padding: 2vw 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+}
+
+header h1 {
+  font-size: clamp(1.5rem, 6vw, 3.5rem);
+  font-weight: 600;
+}
+
+/* Main Content */
+main {
+  width: 100%; /* Use the full width of the page */
+  background-color: white;
+  padding: 2vw; /* Responsive padding */
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1); /* 10px shadow */
+}
+
+main h2 {
+  font-size: clamp(1.25rem, 4.5vw, 2.5rem); /* Min: 1.25rem, Max: 2.5rem */
+  margin-top: 2vw;
+  color: #4682B4;
+  border-bottom: 0.125rem solid #4682B4;
+  padding-bottom: 0.3125rem;
+}
+
+main p {
+  margin-bottom: 1.5vw;
+  font-size: clamp(1rem, 3.5vw, 1.25rem); /* Min: 1rem, Max: 1.25rem */
+  line-height: 1.8;
+}
