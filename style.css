@@ -19,7 +19,6 @@ body {
 /* Header */
 header {
   background-color: #4682B4; /* Darker blue */
-  color: white;
   text-align: center;
   padding: 2vw 0; /* Responsive padding */
 }
@@ -27,6 +26,12 @@ header {
 header h1 {
   font-size: clamp(1.5rem, 6vw, 3.5rem); /* Min: 1.5rem, Max: 3.5rem, scales with viewport width */
   font-weight: 600;
+}
+
+/* Make the header link specific */
+header a {
+  text-decoration: none;
+  color: white; /* Ensure link text is white */
 }
 
 /* Main Content */
@@ -56,12 +61,10 @@ main h5 {
 }
 
 #major-minor {
-
   margin-bottom: 0;
 }
 
 #projects-content {
-  /* margin-top: 1vw; */
   display: none; /* Hide projects content by default */
 }
 
