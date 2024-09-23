@@ -128,6 +128,18 @@ main .skills li {
   box-shadow: 0 0 0.25rem rgba(0, 0, 0, 0.1);
 }
 
+#visualizations {
+  background-color: #4682B4;
+  color: white;
+  border: none;
+  border-radius: 0.3125rem;
+  padding: 1vw 2vw; /* Responsive padding */
+  font-size: clamp(0.875rem, 3.5vw, 1.25rem); /* Min: 0.875rem, Max: 1.25rem */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1vw;
+}
+
 /* Style for the GitHub link using an id */
 #github-link {
   margin-top: 2vw;

@@ -11,3 +11,10 @@ toggleButton.addEventListener('click', () => {
         toggleButton.textContent = 'Show Project Details';
     }
 });
+
+// Navigate to visualizations.html when the button is clicked
+const visualizationsButton = document.querySelector('#visualizations');
+
+visualizationsButton.addEventListener('click', () => {
+    window.location.href = 'visualizations.html'; // Redirect to visualizations.html
+});
