@@ -40,4 +40,5 @@ This project utilized AI assistance from OpenAI's GPT-4 model, specifically thro
 
 The AI was used as a supplement to my own understanding and development, aiding in streamlining the coding process and offering alternative approaches where necessary. All final decisions were made and implemented by me.
 
-
+**ChatGPT Chat Link**
+https://chatgpt.com/share/66f5beae-dbd8-8005-af08-38d7cc513be9
