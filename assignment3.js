@@ -13,7 +13,8 @@ async function render() {
       vl.y().fieldQ("global_sales").aggregate("sum").title("Global Sales"), 
       vl.facet().fieldN("platform").title("Platform"), // facet the graph by platform
       vl.color().fieldN("genre")
-      .scale({scheme: "category20"}) // make each genre a different color
+      .scale({scheme: "category20"}), // make each genre a different color
+      vl.tooltip().fieldQ("global_sales").aggregate("sum")
     )
     // .width("container")
     // .width(1000)
@@ -27,10 +28,21 @@ async function render() {
   const vl2a = vl
   .markArea()
   .data(data)
+  .transform(
+    vl.aggregate([
+      {op: "sum", field: "global_sales", as: "total_global_sales"}
+    ])
+    .groupby(["year", "genre"])
+  )
   .encode(
     vl.x().fieldN("year").title("Year").axis({format: "d"}), 
-    vl.y().aggregate("sum").fieldQ("global_sales").title("Global Sales"), 
-    vl.color().fieldN("genre").scale({scheme: "category20"}).title("Genre")
+    vl.y().fieldQ("total_global_sales").title("Global Sales"), 
+    vl.color().fieldN("genre").scale({scheme: "category20"}).title("Genre"), 
+    vl.tooltip([
+      vl.fieldN("year"), 
+      vl.fieldN("genre"), 
+      vl.fieldQ("total_global_sales")
+    ])
   )
 
   .height(500)
