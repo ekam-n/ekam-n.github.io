@@ -12,9 +12,16 @@ toggleButton.addEventListener('click', () => {
     }
 });
 
-// Navigate to visualizations.html when the button is clicked
+// Navigate to assignment2.html when the button is clicked
 const assignment2Button = document.querySelector('#assignment2');
 
 assignment2Button.addEventListener('click', () => {
-    window.location.href = 'assignment2.html'; // Redirect to visualizations.html
+    window.location.href = 'assignment2.html'; // Redirect to assignment2.html
+});
+
+// Navigate to assignment3.html when the button is clicked
+const assignment3Button = document.querySelector('#assignment3');
+
+assignment3Button.addEventListener('click', () => {
+    window.location.href = 'assignment3.html'; // Redirect to assignment3.html
 });
