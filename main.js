@@ -13,8 +13,8 @@ toggleButton.addEventListener('click', () => {
 });
 
 // Navigate to visualizations.html when the button is clicked
-const visualizationsButton = document.querySelector('#visualizations');
+const assignment2Button = document.querySelector('#assignment2');
 
-visualizationsButton.addEventListener('click', () => {
-    window.location.href = 'visualizations.html'; // Redirect to visualizations.html
+assignment2Button.addEventListener('click', () => {
+    window.location.href = 'assignment2.html'; // Redirect to visualizations.html
 });

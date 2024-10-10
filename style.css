@@ -69,7 +69,7 @@ main h5 {
 }
 
 /* Button Style */
-#toggle-button {
+.button {
   background-color: #4682B4;
   color: white;
   border: none;
@@ -81,11 +81,11 @@ main h5 {
   margin-top: 1vw;
 }
 
-#toggle-button:hover {
+.button:hover {
   background-color: #356b93; /* Darker shade on hover */
 }
 
-#toggle-button:focus {
+.button:focus {
   outline: none;
   box-shadow: 0 0 0.5rem rgba(70, 130, 180, 0.5); /* Add a subtle shadow on focus */
 }
