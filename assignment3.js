@@ -16,7 +16,7 @@ async function render() {
     .height(400)
     .toSpec();
 
-  const view = await vegaEmbed("#view", vlSpec).view;
+  const view = await vegaEmbed("#a3-vis1", vlSpec).view;
   view.run();
 }
 
