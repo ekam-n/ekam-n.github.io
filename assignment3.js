@@ -51,16 +51,28 @@ async function render() {
   const view2a = await vegaEmbed("#a3-vis2a", vl2a).view
   // view2.run()
 
+  // create the heat map
   const vl2b = vl
   .markRect()
   .data(data)
+  .transform(
+    vl.aggregate([
+      {op: "sum", field: "sales_amount", as: "total_sales_amount"}
+    ])
+    .groupby(["year", "platform"])
+  )
   .encode(
     vl.x().fieldN("year").title("Year").axis({format: "d"}), 
     vl.y().fieldN("platform").title("Platform"), 
     vl.color()
-      .aggregate("sum").fieldQ("sales_amount")
+      .aggregate("sum").fieldQ("total_sales_amount")
       .scale({ scheme: 'blues' }) // set color scale to 'blues'
       .title("Total Sales (in millions)"), // title for the color legend
+    vl.tooltip([
+      vl.fieldN("year"), 
+      vl.fieldN("genre"), 
+      vl.fieldQ("total_sales_amount")
+    ])
   )
 
   .height(500)
@@ -73,9 +85,10 @@ async function render() {
   .data(data)
   .encode(
     vl.x().fieldN("platform").title("Platform"), // make the genre the x field
-    vl.y().aggregate("sum").fieldQ("global_sales").title("Global Sales"), // make the global sales the y field, aggregated to a sum
+    vl.y().aggregate("sum").fieldQ("sales_amount").title("Sales"), // make the global sales the y field, aggregated to a sum
     vl.facet().fieldN("sales_region").title("Region"), // facet the graph by platform
-    vl.color().fieldN("platform").scale({scheme: "category20"}) // make each genre a different color
+    vl.color().fieldN("platform").scale({scheme: "category20"}), // make each genre a different color
+    vl.tooltip().fieldQ("sales_amount").aggregate("sum")
   )
   .height(500)
   .toSpec();
@@ -92,14 +105,14 @@ async function render() {
     vl.x().fieldQ("year").title("Years").axis({format: "d"}), 
     vl.y().aggregate("sum").fieldQ("sales_amount").title("Sales"), 
     vl.color()
-    .fieldN("genre")
-    .scale({range: ["#bbbbbb"]})
-    .condition(
-      { 
-        test: 'datum.genre === "Role-Playing"',
-        value: "red"
-      }
-     )
+      .fieldN("genre")
+      .scale({range: ["#bbbbbb"]})
+      .condition(
+        { 
+          test: 'datum.genre === "Role-Playing"',
+          value: "red"
+        }
+      )
     .legend(null), 
     vl.opacity() 
       .condition(
