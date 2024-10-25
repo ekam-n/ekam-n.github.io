@@ -158,6 +158,23 @@ html {
   scroll-behavior: smooth;
 }
 
+.image-wheel {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.project-image {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+}
+
+button {
+  margin: 5px;
+}
+
 .vis-container {
   display: flex;
   flex-direction: column;
