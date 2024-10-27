@@ -128,7 +128,13 @@ main .skills li {
   text-align: center;
   border: 1px solid #4682B4;
   box-shadow: 0 0 0.25rem rgba(0, 0, 0, 0.1);
+
+  /* Center text vertically and horizontally */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 
 /* Style for the GitHub link using an id */
 .contact-link {
