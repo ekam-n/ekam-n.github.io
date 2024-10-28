@@ -3,12 +3,12 @@ const toggleButton = document.querySelector('#toggle-button');
 const projectContent = document.querySelector('#projects-content');
 
 toggleButton.addEventListener('click', () => {
-    if (projectContent.style.display === 'none' || projectContent.style.display === '') {
+    if (projectContent.style.display === 'none') {
         projectContent.style.display = 'block';
-        toggleButton.textContent = 'Hide Project Details';
+        toggleButton.textContent = 'Hide Projects';
     } else {
-        projectContent.style.display = 'none';
-        toggleButton.textContent = 'Show Project Details';
+        projectContent.style.display = 'none' || projectContent.style.display === '';
+        toggleButton.textContent = 'Show Projects';
     }
 });
 

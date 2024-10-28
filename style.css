@@ -10,7 +10,7 @@ html {
 }
 
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: 'FiraGO', sans-serif;
   background-color: #f4f4f4;
   color: #333;
   line-height: 1.6;
@@ -64,9 +64,6 @@ main h5 {
   margin-bottom: 0;
 }
 
-#projects-content {
-  display: none; /* Hide projects content by default */
-}
 
 /* Button Style */
 .button {
@@ -164,10 +161,43 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Style for image wheel container */
 .image-wheel {
-  text-align: center;
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
 }
+
+/* Style for image wheel buttons */
+.image-wheel button {
+  background-color: #4682B4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 4.5rem; /* Fixed width for uniform size */
+  height: 2.5rem; /* Fixed height for uniform size */
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 0.5rem 0.25rem;
+}
+
+.image-wheel button:hover {
+  background-color: #315d87;
+}
+
+/* Center buttons below the image */
+.image-wheel-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 
 .project-image {
   width: 100%;

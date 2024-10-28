@@ -12,61 +12,74 @@
     </header>
     
     <main>
-      <p>Hi! I'm Ekam. Welcome to my personal website. I'm a student at Simon Fraser University. I'm passionate about videogame design and development, as well as playing videogames (of course). I also love to get active in the gym and with sports like soccer and basketball.</p>
+      <p>Hi! I'm Ekam. Welcome to my personal website. I'm a student at Simon Fraser University. I'm passionate about videogame design and development, as well as playing videogames (of course). I also love music, sports, and pop culture.</p>
 
-      <h2>Skills</h2>
+      <!-- <h2>Skills</h2>
       <ul class="skills">
         <li>Java</li>
         <li>C++</li>
         <li>Object-Oriented Programming</li>
-        <li>2D Physics and Math</li>
         <li>2D Complex Object Behaviours</li>
-        <li>Decorator Pattern</li>
-        <li>Factory Pattern</li>
-        <li>Grey/White Box Testing</li>
         <li>Level Design</li>
-        <lil></lil>
-      </ul>
+        <li>Mechanic Design</li>
+        <li>UI Design</li>
+        <li>Graphic Design</li>
+        <li>Grey/White Box Testing</li>
+      </ul> -->
 
-      <h2>Education</h2>
+      <!-- <h2>Education</h2>
       <div id="education-content">
         <h3>Bachelor of Science, Simon Fraser University</h3>
         <p id="major-minor">Major in Interactive Arts and Technology, Minor in Computer Science</p>
-      </div>
+      </div> -->
 
       <h2>Projects</h2>
-      <button class="button" id="toggle-button">Show/Hide Project Details</button>
+      <button class="button" id="toggle-button">Hide Projects</button>
       <div id="projects-content">
         <h3>Volt Legacy</h3>
-        <p>Multi-level challenging platformer where each level focuses on introducing game mechanics, building on them, and then combining mechanics for increased difficulty. Manual implementation of all physics, game-logic, graphics, sound effects, music, and menu  GUI.</p>
+        <p>Multi-level challenging platformer where each level focuses on introducing game mechanics, building on them, and then combining mechanics for increased difficulty. I manually implemented all physics, game-logic, graphics, sound effects, music, and the menu GUI in Java (with libraries).</p>
 
         <!-- Image Wheel for Volt Legacy -->
         <div class="image-wheel">
           <img id="volt-legacy-img" src="images/volt1.png" alt="Volt Legacy screenshot" class="project-image">
+          <div class="image-wheel-buttons">
+            <button onclick="prevImage('volt-legacy')">Previous</button>
+            <button onclick="nextImage('volt-legacy')">Next</button>
+          </div>
+        </div>
+
+        <!-- <h3>Demon's Gate</h3>
+        <p>This was a group project where we created a roll and move tabletop game. We created a detailed rulebook, different player types, mechanics, events, items, etc. I spearheaded the project, organizing and leading ideation, playtests, and asset generation.</p>
+
+        Image Wheel for Demon's Gate
+        <div class="image-wheel">
+          <img id="volt-legacy-img" src="images/volt1.png" alt="Volt Legacy screenshot" class="project-image">
           <button onclick="prevImage('volt-legacy')">Previous</button>
           <button onclick="nextImage('volt-legacy')">Next</button>
-        </div>
+        </div> -->
 
         <h3>Controlled Chaos</h3>
         <p>Here, I had the opportunity to integrate hardware with software. My group and I created an interactive mixed-reality racing game where users control a custom-built RC car which triggers electronic quizzes that the user must complete with a laptop and connected touch sensors.</p>
-        <p>My role in this project included most of the technical aspects. For example, I was responsible for constructing the RC car and connecting it using Bluetooth and the Arduino microcontroller to a PS5 controller.</p>
+        <p>My role in this project included most of the technical aspects. I programmed the car, sensors, and game logic in Arduino (based on C++).</p>
         <a href="https://www.sfu.ca/siat/showcase/spring-2024-project-showcase/iat-267-controlled-chaos.html">Featured in SFU SIAT's Spring 2024 Showcase</a>
 
-      <!-- Image Wheel for Controlled Chaos -->
-      <div class="image-wheel">
-        <img id="controlled-chaos-img" src="images/chaos1.jpg" alt="Controlled Chaos screenshot" class="project-image">
-        <button onclick="prevImage('controlled-chaos')">Previous</button>
-        <button onclick="nextImage('controlled-chaos')">Next</button>
-      </div>
+        <!-- Image Wheel for Controlled Chaos -->
+        <div class="image-wheel">
+          <img id="controlled-chaos-img" src="images/chaos1.jpg" alt="Controlled Chaos screenshot" class="project-image">
+          <div class="image-wheel-buttons">
+            <button onclick="prevImage('controlled-chaos')">Previous</button>
+            <button onclick="nextImage('controlled-chaos')">Next</button>
+          </div>
+        </div>
 
-      <!-- <h3>Snuggle Sculptors</h3>
-      <p></p> -->
+        <!-- <h3>Snuggle Sculptors</h3>
+        <p></p> -->
 
       </div>
 
       <h2>Visualizations Portfolio</h2>
-      <button class="button" id="assignment2">IAT 355 Assignment 2</button>
-      <button class="button" id="assignment3">IAT 355 Assignment 3</button>
+      <button class="button" id="assignment2">Basic Visualizations</button>
+      <button class="button" id="assignment3">Vega-Lite Visualizations</button>
 
       <h2>Contact Information</h2>
       <a href="https://www.github.com/ekam-n" class="contact-link">github</a>
