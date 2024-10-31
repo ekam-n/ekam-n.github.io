@@ -175,7 +175,7 @@ html {
   color: white;
   border: none;
   border-radius: 5px;
-  width: 4.5rem; /* Fixed width for uniform size */
+  width: 5.5rem; /* Fixed width for uniform size */
   height: 2.5rem; /* Fixed height for uniform size */
   font-size: 1rem;
   display: flex;

@@ -29,7 +29,8 @@ assignment3Button.addEventListener('click', () => {
 // Image sources for each project
 const images = {
     'volt-legacy': ['images/volt1.png', 'images/volt2.png', 'images/volt3.png', 'images/volt4.png', 'images/volt5.png'],
-    'controlled-chaos': ['images/chaos1.jpg', 'images/chaos2.png', 'images/chaos3.jpg']
+    'controlled-chaos': ['images/chaos1.jpg', 'images/chaos2.png', 'images/chaos3.jpg'],
+    "demon's gate": []
 };
 
 // Counters to track the current image for each project
