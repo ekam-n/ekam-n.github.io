@@ -29,7 +29,7 @@ assignment3Button.addEventListener('click', () => {
 // Image sources for each project
 const images = {
     'volt-legacy': ['images/volt1.png', 'images/volt2.png', 'images/volt3.png', 'images/volt4.png', 'images/volt5.png'],
-    'controlled-chaos': ['images/chaos1.jpg', 'images/chaos2.png', 'images/chaos3.jpg'],
+    'controlled-chaos': ['images/chaos1.png', 'images/chaos2.jpg', 'images/chaos3.jpg'],
     "demons-gate": ['images/demons1.png', 'images/demons2.png', 'images/demons3.png', 'images/demons4.png'],
     'snuggle-sculptors': ['images/snuggle1.png', 'images/snuggle2.png', 'images/snuggle3.png', 'images/snuggle4.png', 'images/snuggle5.png']
 };
