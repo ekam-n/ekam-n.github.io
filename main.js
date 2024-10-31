@@ -30,13 +30,16 @@ assignment3Button.addEventListener('click', () => {
 const images = {
     'volt-legacy': ['images/volt1.png', 'images/volt2.png', 'images/volt3.png', 'images/volt4.png', 'images/volt5.png'],
     'controlled-chaos': ['images/chaos1.jpg', 'images/chaos2.png', 'images/chaos3.jpg'],
-    "demon's gate": []
+    "demons-gate": ['images/demons1.png', 'images/demons2.png', 'images/demons3.png', 'images/demons4.png'],
+    'snuggle-sculptors': ['images/snuggle1.png', 'images/snuggle2.png', 'images/snuggle3.png', 'images/snuggle4.png', 'images/snuggle5.png']
 };
 
 // Counters to track the current image for each project
 const imageCounters = {
     'volt-legacy': 0,
-    'controlled-chaos': 0
+    'controlled-chaos': 0,
+    'demons-gate': 0,
+    'snuggle-sculptors': 0
 };
 
 // Function to show the previous image
