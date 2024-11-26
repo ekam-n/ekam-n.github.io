@@ -26,6 +26,13 @@ assignment3Button.addEventListener('click', () => {
     window.location.href = 'assignment3.html'; // Redirect to assignment3.html
 });
 
+// Navigate to pereira.html when the button is clicked
+const pereiraButton = document.querySelector('#pereira');
+
+pereiraButton.addEventListener('click', () => {
+    window.location.href = 'pereira.html' // redirect to pereira.html
+})
+
 // Image sources for each project
 const images = {
     'volt-legacy': ['images/volt1.png', 'images/volt2.png', 'images/volt3.png', 'images/volt4.png', 'images/volt5.png'],
