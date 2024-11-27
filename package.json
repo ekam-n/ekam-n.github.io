@@ -4,12 +4,17 @@
   "description": "## Main Elements - **Home Page (index.html)**:    - Introduction about Ekam.   - Sections for Education, Projects (with toggle functionality), Skills, and Contact Information.   - A button to navigate to the Visualizations Portfolio.",
   "main": "main.js",
   "scripts": {
-    "build-css": "tailwindcss build src/styles.css -o public/styles.css"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss-cli": "^11.0.0",
     "tailwindcss": "^3.4.15"
+  },
+  "dependencies": {
+    "vite": "^6.0.0"
   }
 }
