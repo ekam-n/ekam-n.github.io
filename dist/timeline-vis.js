@@ -36,7 +36,7 @@ async function drawVis() {
     { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
     { result: 1, special_fight: 1, knockout: 0, izzy_fight: 0 }, // 5th glory mw defense
     { result: 1, special_fight: 1, knockout: 0, izzy_fight: 0 }, // wins glory light hw
-    { result: 0, special_fight: 0, knockout: 0, izzy_fight: 0 },
+    { result: 0, special_fight: 0, knockout: 0, izzy_fight: 0 }
 
   ];
 
