@@ -30,7 +30,7 @@ assignment3Button.addEventListener('click', () => {
 const pereiraButton = document.querySelector('#pereira');
 
 pereiraButton.addEventListener('click', () => {
-    window.location.href = 'pereira.html' // redirect to pereira.html
+    window.location.href = 'dist/pereira.html' // redirect to pereira.html
 })
 
 // Image sources for each project
