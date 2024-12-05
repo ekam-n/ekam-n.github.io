@@ -44,9 +44,10 @@ async function drawVis() {
       .domain(d3.extent(followersData, (d) => d.date))
       .range([margin.left, width - margin.right]);
 
+    const maxFollowers = d3.max(followersData, (d) => d.followers_count);
     const yScaleFollowers = d3
       .scaleLinear()
-      .domain([0, d3.max(followersData, (d) => d.followers_count)])
+      .domain([0, Math.ceil(maxFollowers / 1e6) * 1e6]) // Ensure the domain covers up to the nearest million
       .range([height - margin.bottom, margin.top]);
 
     // Clear existing elements in both SVGs
@@ -64,6 +65,16 @@ async function drawVis() {
       .attr("transform", `translate(${margin.left}, 0)`)
       .call(d3.axisLeft(yScaleWins));
 
+    // Add horizontal y-axis label above y-axis
+    svgWins
+      .append("text")
+      .attr("x", margin.left - "2rem")
+      .attr("y", margin.top - 20) // Positioned above the y-axis
+      .attr("text-anchor", "start")
+      .attr("font-size", "1.2em")
+      .attr("fill", "black")
+      .text("Cumulative Wins");
+
     // Axes for followers
     svgFollowers
       .append("g")
@@ -73,7 +84,21 @@ async function drawVis() {
     svgFollowers
       .append("g")
       .attr("transform", `translate(${margin.left}, 0)`)
-      .call(d3.axisLeft(yScaleFollowers));
+      .call(
+        d3.axisLeft(yScaleFollowers)
+          .tickValues(d3.range(0, Math.ceil(maxFollowers / 1e6) + 1).map((d) => d * 1e6)) // Generate ticks for millions
+          .tickFormat((d) => d / 1e6) // Format tick labels as millions
+      );
+
+    // Add horizontal y-axis label above y-axis
+    svgFollowers
+      .append("text")
+      .attr("x", margin.left - "2rem")
+      .attr("y", margin.top - 20) // Positioned above the y-axis
+      .attr("text-anchor", "start")
+      .attr("font-size", "1.2em")
+      .attr("fill", "black")
+      .text("Instagram Followers (Millions)");
 
     // Line for cumulative wins
     const lineWins = d3
@@ -102,38 +127,6 @@ async function drawVis() {
       .attr("stroke", "#E1306C") // Instagram pink/purple
       .attr("stroke-width", 2)
       .attr("d", lineFollowers);
-
-    // Labels for cumulative wins
-    svgWins
-      .append("text")
-      .attr("x", width / 2)
-      .attr("y", height - 10)
-      .attr("text-anchor", "middle")
-      .text("Date");
-
-    svgWins
-      .append("text")
-      .attr("x", -height / 2)
-      .attr("y", 20)
-      .attr("transform", "rotate(-90)")
-      .attr("text-anchor", "middle")
-      .text("Cumulative Wins");
-
-    // Labels for followers
-    svgFollowers
-      .append("text")
-      .attr("x", width / 2)
-      .attr("y", height - 10)
-      .attr("text-anchor", "middle")
-      .text("Date");
-
-    svgFollowers
-      .append("text")
-      .attr("x", -height / 2)
-      .attr("y", 20)
-      .attr("transform", "rotate(-90)")
-      .attr("text-anchor", "middle")
-      .text("Instagram Followers");
   };
 
   // Initial draw
