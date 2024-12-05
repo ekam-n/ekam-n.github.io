@@ -73,7 +73,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
       .attr("y", d => yScale(d.days))
       .attr("width", xScale.bandwidth())
       .attr("height", d => height - margin.bottom - yScale(d.days))
-      .attr("fill", d => d.fighter === 'Alex Pereira' ? '#FFD700' : 'rgba(210, 211, 210, 0.95)')
+      .attr("fill", d => d.fighter === 'Alex Pereira' ? '#ebac00' : 'rgba(210, 211, 210, 0.95)')
       .on("mouseover", (event, d) => {
           tooltip
               .style("display", "block")

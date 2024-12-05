@@ -89,7 +89,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
     .attr("cx", (d) => xScale(d.strikesAttempted))
     .attr("cy", (d) => yScale(d.strikingAccuracy))
     .attr("r", 5)
-    .attr("fill", (d) => (d.name === "Alex Pereira" ? "#FFD700" : "rgba(210, 211, 210, 0.97)"))
+    .attr("fill", (d) => (d.name === "Alex Pereira" ? "#ebac00" : "rgba(210, 211, 210, 0.97)"))
     .on("mouseover", (event, d) => {
       tooltip
         .style("display", "block")

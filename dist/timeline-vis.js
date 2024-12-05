@@ -44,7 +44,7 @@ async function drawTimeline() {
       .attr("y1", height / 2)
       .attr("x2", xScale(timelineData[i + 1].year) - lineOffset)
       .attr("y2", height / 2)
-      .attr("stroke", "#FFD700")
+      .attr("stroke", "#ebac00")
       .attr("stroke-width", 8)
       .style("opacity", 0.3);
     yellowLines.push(line);
@@ -57,7 +57,7 @@ async function drawTimeline() {
     .attr("y1", height / 2)
     .attr("x2", xScale(timelineData[0].year) - lineOffset)
     .attr("y2", height / 2)
-    .attr("stroke", "#FFD700")
+    .attr("stroke", "#ebac00")
     .attr("stroke-width", 8)
     .style("opacity", 0.3);
 
@@ -67,7 +67,7 @@ async function drawTimeline() {
     .attr("y1", height / 2)
     .attr("x2", width - margin.right / 2)
     .attr("y2", height / 2)
-    .attr("stroke", "#FFD700")
+    .attr("stroke", "#ebac00")
     .attr("stroke-width", 8)
     .style("opacity", 0.3);
 
@@ -92,7 +92,7 @@ async function drawTimeline() {
     .attr("cy", height / 2)
     .attr("r", circleRadius)
     .attr("fill", (d) => (d.izzyFight ? "green" : "white"))
-    .attr("stroke", (d) => (d.izzyFight ? "green" : "#FFD700"))
+    .attr("stroke", (d) => (d.izzyFight ? "green" : "#ebac00"))
     .attr("stroke-width", 8)
     .style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
 
