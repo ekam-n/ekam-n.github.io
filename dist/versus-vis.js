@@ -9,7 +9,7 @@ async function drawVis() {
     { round: 5, alex_strikes: 28, izzy_strikes: 9 },
   ];
 
-  const margin = { top: 20, right: 20, bottom: 30, left: 60 }; // Adjusted left margin
+  const margin = { top: 20, right: 20, bottom: 50, left: 60 }; // Adjusted bottom margin for label
   const legendHeight = 40;
 
   function resize() {
@@ -52,8 +52,8 @@ async function drawVis() {
       .attr("y", yScale.bandwidth() / 4)
       .attr("width", (d) => xScale(d.alex_strikes) - xScale(0))
       .attr("height", yScale.bandwidth() / 4)
-      .attr("fill", "blue")
-      .attr("opacity", (d) => (d.round === 5 ? 1 : 0.5)); // Highlight round 5
+      .attr("fill", (d) => (d.round === 5 ? "#ebac00" : "lightgray")) // Yellow for round 5, light gray for others
+      .attr("opacity", (d) => (d.round === 5 ? 1 : 0.3)); // Highlight round 5, dim others
 
     // Add Izzy's bars
     rounds
@@ -62,8 +62,8 @@ async function drawVis() {
       .attr("y", (yScale.bandwidth() / 4) * 2)
       .attr("width", (d) => xScale(d.izzy_strikes) - xScale(0))
       .attr("height", yScale.bandwidth() / 4)
-      .attr("fill", "red")
-      .attr("opacity", (d) => (d.round === 5 ? 1 : 0.5)); // Highlight round 5
+      .attr("fill", (d) => (d.round === 5 ? "green" : "#a9a9a9")) // Green for round 5, dark gray (#a9a9a9) for others
+      .attr("opacity", (d) => (d.round === 5 ? 1 : 0.3)); // Highlight round 5, dim others
 
     // Add x-axis
     svg
@@ -71,6 +71,15 @@ async function drawVis() {
       .attr("transform", `translate(0,${height - margin.bottom - legendHeight})`)
       .call(d3.axisBottom(xScale).ticks(Math.min(5, width / 100)))
       .attr("font-size", "12px");
+
+    // Add x-axis label
+    svg
+      .append("text")
+      .attr("x", width / 2)
+      .attr("y", height - margin.bottom + 15) // Position below the axis
+      .attr("text-anchor", "middle")
+      .attr("font-size", "14px")
+      .text("Significant Strikes");
 
     // Add y-axis
     svg
@@ -91,7 +100,7 @@ async function drawVis() {
       .attr("y", 0)
       .attr("width", 20)
       .attr("height", 20)
-      .attr("fill", "blue");
+      .attr("fill", "#ebac00"); // Yellow for Alex
 
     legend
       .append("text")
@@ -108,7 +117,7 @@ async function drawVis() {
       .attr("y", 0)
       .attr("width", 20)
       .attr("height", 20)
-      .attr("fill", "red");
+      .attr("fill", "green"); // Green for Izzy
 
     legend
       .append("text")

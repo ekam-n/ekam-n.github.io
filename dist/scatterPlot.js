@@ -13,7 +13,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
   const width = 500;
   const height = 500;
-  const margin = { top: 50, right: 50, bottom: 50, left: 50 };
+  const margin = { top: 50, right: 85, bottom: 75, left: 75 };
 
   const xScale = d3
     .scaleLinear()
@@ -31,30 +31,56 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
     .attr("width", width)
     .attr("height", height);
 
-  // Add axes
-  const bottomAxis = svg
+  // Add X-axis
+  svg
     .append("g")
     .attr("transform", `translate(0, ${height - margin.bottom})`)
-    .call(d3.axisBottom(xScale).ticks(5).tickSize(-height + margin.top + margin.bottom));
+    .call(d3.axisBottom(xScale).ticks(5))
+    .selectAll("text")
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px");
 
-  const leftAxis = svg
+  // X-axis label
+  svg
+    .append("text")
+    .attr("x", width / 2)
+    .attr("y", height - margin.bottom / 2)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px")
+    .text("Strikes Attempted per Minute");
+
+  // Add Y-axis
+  svg
     .append("g")
     .attr("transform", `translate(${margin.left}, 0)`)
-    .call(d3.axisLeft(yScale).ticks(5).tickSize(-width + margin.left + margin.right));
+    .call(d3.axisLeft(yScale).ticks(5))
+    .selectAll("text")
+    .style("font-size", "12px");
 
-  // Add bottom border for x-axis
+  // Y-axis label
   svg
-    .append("path")
-    .attr("d", `M${margin.left},${height - margin.bottom}H${width - margin.right}`)
-    .attr("stroke", "black")
-    .attr("stroke-width", 1);
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -(height / 2.25))
+    .attr("y", margin.left / 2.25)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px")
+    .text("Striking Accuracy (%)");
 
-  // Remove top and right outlines
-  bottomAxis.selectAll(".domain").remove();
-  leftAxis.selectAll(".domain").remove();
-  svg.selectAll(".tick line").attr("stroke", "#e0e0e0");
+  // Tooltip
+  const tooltip = d3
+    .select("#scatterplot")
+    .append("div")
+    .style("position", "absolute")
+    .style("background-color", "rgba(0, 0, 0, 0.7)")
+    .style("color", "white")
+    .style("padding", "8px")
+    .style("border-radius", "5px")
+    .style("font-size", "12px")
+    .style("display", "none")
+    .style("pointer-events", "none");
 
-  // Add circles
+  // Add circles with tooltips
   svg
     .selectAll("circle")
     .data(fighterStats)
@@ -63,16 +89,31 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
     .attr("cx", (d) => xScale(d.strikesAttempted))
     .attr("cy", (d) => yScale(d.strikingAccuracy))
     .attr("r", 5)
-    .attr("fill", (d) => (d.name === "Alex Pereira" ? "#ff4500" : "#2e8b57"));
+    .attr("fill", (d) => (d.name === "Alex Pereira" ? "#FFD700" : "rgba(210, 211, 210, 0.97)"))
+    .on("mouseover", (event, d) => {
+      tooltip
+        .style("display", "block")
+        .html(
+          `<strong>${d.name}</strong><br>Strikes Attempted: ${d.strikesAttempted}<br>Striking Accuracy: ${d.strikingAccuracy}%`
+        );
+    })
+    .on("mousemove", (event) => {
+      tooltip
+        .style("left", `${event.pageX + 10}px`)
+        .style("top", `${event.pageY - 28}px`);
+    })
+    .on("mouseout", () => {
+      tooltip.style("display", "none");
+    });
 
-  // Add labels
+  // Add labels to points
   svg
     .selectAll("text.label")
     .data(fighterStats)
     .enter()
     .append("text")
-    .attr("x", (d) => Math.max(margin.left + 5, Math.min(xScale(d.strikesAttempted) + 8, width - margin.right - 5)))
-    .attr("y", (d) => Math.max(margin.top + 12, Math.min(yScale(d.strikingAccuracy) + 3, height - margin.bottom - 5)))
+    .attr("x", (d) => xScale(d.strikesAttempted) + 8)
+    .attr("y", (d) => yScale(d.strikingAccuracy) + 3)
     .attr("font-size", "10px")
     .attr("fill", "#333")
     .text((d) => d.name)
