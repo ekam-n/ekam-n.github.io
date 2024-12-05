@@ -8,59 +8,80 @@ async function drawVis() {
 
   // Initial dimensions
   let width = container.node().getBoundingClientRect().width;
-  let height = width * 0.5;
-  const margin = { top: 50, right: 100, bottom: 50, left: 100 };
+  const height = 400;
+  const margin = { top: 50, right: 50, bottom: 50, left: 60 };
 
-  // Create scales
-  const xScale = d3.scaleTime();
-  const yScaleLeft = d3.scaleLinear();
-  const yScaleRight = d3.scaleLinear();
-
-  const svg = container
+  // Create SVGs for the two graphs
+  const svgWins = container
     .append("svg")
-    .attr("width", width)
+    .attr("width", "100%")
+    .attr("height", height)
+    .classed("bg-gray-100", true);
+
+  const svgFollowers = container
+    .append("svg")
+    .attr("width", "100%")
     .attr("height", height)
     .classed("bg-gray-100", true);
 
   const draw = () => {
-    // Update dimensions
     width = container.node().getBoundingClientRect().width;
-    height = width * 0.5;
 
-    // Update scales
-    xScale.domain(d3.extent(ufcData, (d) => d.date)).range([margin.left, width - margin.right]);
-    yScaleLeft.domain([9, d3.max(ufcData, (d) => d.cumulative_wins)]).range([height - margin.bottom, margin.top]);
-    yScaleRight.domain([0, d3.max(followersData, (d) => d.followers_count)]).range([height - margin.bottom, margin.top]);
+    // Scales for cumulative wins
+    const xScaleWins = d3
+      .scaleTime()
+      .domain(d3.extent(ufcData, (d) => d.date))
+      .range([margin.left, width - margin.right]);
 
-    // Update SVG size
-    svg.attr("width", width).attr("height", height);
+    const yScaleWins = d3
+      .scaleLinear()
+      .domain([0, d3.max(ufcData, (d) => d.cumulative_wins)])
+      .range([height - margin.bottom, margin.top]);
 
-    // Clear existing elements
-    svg.selectAll("*").remove();
+    // Scales for followers
+    const xScaleFollowers = d3
+      .scaleTime()
+      .domain(d3.extent(followersData, (d) => d.date))
+      .range([margin.left, width - margin.right]);
 
-    // Axes
-    svg
+    const yScaleFollowers = d3
+      .scaleLinear()
+      .domain([0, d3.max(followersData, (d) => d.followers_count)])
+      .range([height - margin.bottom, margin.top]);
+
+    // Clear existing elements in both SVGs
+    svgWins.selectAll("*").remove();
+    svgFollowers.selectAll("*").remove();
+
+    // Axes for cumulative wins
+    svgWins
       .append("g")
       .attr("transform", `translate(0, ${height - margin.bottom})`)
-      .call(d3.axisBottom(xScale).tickFormat(d3.timeFormat("%b %Y")));
+      .call(d3.axisBottom(xScaleWins).tickFormat(d3.timeFormat("%b %Y")));
 
-    svg
+    svgWins
       .append("g")
       .attr("transform", `translate(${margin.left}, 0)`)
-      .call(d3.axisLeft(yScaleLeft));
+      .call(d3.axisLeft(yScaleWins));
 
-    svg
+    // Axes for followers
+    svgFollowers
       .append("g")
-      .attr("transform", `translate(${width - margin.right}, 0)`)
-      .call(d3.axisRight(yScaleRight));
+      .attr("transform", `translate(0, ${height - margin.bottom})`)
+      .call(d3.axisBottom(xScaleFollowers).tickFormat(d3.timeFormat("%b %Y")));
+
+    svgFollowers
+      .append("g")
+      .attr("transform", `translate(${margin.left}, 0)`)
+      .call(d3.axisLeft(yScaleFollowers));
 
     // Line for cumulative wins
     const lineWins = d3
       .line()
-      .x((d) => xScale(d.date))
-      .y((d) => yScaleLeft(d.cumulative_wins));
+      .x((d) => xScaleWins(d.date))
+      .y((d) => yScaleWins(d.cumulative_wins));
 
-    svg
+    svgWins
       .append("path")
       .datum(ufcData)
       .attr("fill", "none")
@@ -71,10 +92,10 @@ async function drawVis() {
     // Line for followers
     const lineFollowers = d3
       .line()
-      .x((d) => xScale(d.date))
-      .y((d) => yScaleRight(d.followers_count));
+      .x((d) => xScaleFollowers(d.date))
+      .y((d) => yScaleFollowers(d.followers_count));
 
-    svg
+    svgFollowers
       .append("path")
       .datum(followersData)
       .attr("fill", "none")
@@ -82,15 +103,15 @@ async function drawVis() {
       .attr("stroke-width", 2)
       .attr("d", lineFollowers);
 
-    // Labels
-    svg
+    // Labels for cumulative wins
+    svgWins
       .append("text")
       .attr("x", width / 2)
       .attr("y", height - 10)
       .attr("text-anchor", "middle")
       .text("Date");
 
-    svg
+    svgWins
       .append("text")
       .attr("x", -height / 2)
       .attr("y", 20)
@@ -98,13 +119,21 @@ async function drawVis() {
       .attr("text-anchor", "middle")
       .text("Cumulative Wins");
 
-    svg
+    // Labels for followers
+    svgFollowers
       .append("text")
-      .attr("x", width - 100)
-      .attr("y", margin.top - 10)
+      .attr("x", width / 2)
+      .attr("y", height - 10)
       .attr("text-anchor", "middle")
-      .text("Instagram Followers")
-      .attr("fill", "#E1306C"); // Instagram pink/purple
+      .text("Date");
+
+    svgFollowers
+      .append("text")
+      .attr("x", -height / 2)
+      .attr("y", 20)
+      .attr("transform", "rotate(-90)")
+      .attr("text-anchor", "middle")
+      .text("Instagram Followers");
   };
 
   // Initial draw
