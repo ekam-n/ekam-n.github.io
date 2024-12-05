@@ -1,113 +1,202 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
-async function drawVis() {
-  const kickboxingDataset = [
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 1, izzy_fight: 0 },
-    { result: 1, special_fight: 1, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 0, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 0, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 1, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 0, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 0, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 1, knockout: 0, izzy_fight: 1 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 0, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 1, knockout: 0, izzy_fight: 1 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 0, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 1, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 1, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 0, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 1, knockout: 0, izzy_fight: 0 },
-    { result: 1, special_fight: 1, knockout: 0, izzy_fight: 0 },
-    { result: 0, special_fight: 0, knockout: 0, izzy_fight: 0 }
+async function drawTimeline() {
+  const width = 1600; // Increased width for more spacing
+  const height = 500; // Increased height for better proportions
+  const margin = { top: 150, right: 150, bottom: 150, left: 150 };
+
+  // Data for the timeline
+  const timelineData = [
+    { year: 2014, text: "Wins Glory Middleweight Contender Tournament" },
+    { year: 2015, text: "Wins WGP Kickboxing 85kg title" },
+    { year: 2016, text: "Defeats Israel Adesanya by decision", izzyFight: true },
+    { year: 2017, text: "Defeats Israel Adesanya by knockout", izzyFight: true },
+    { year: 2018, text: "Defends the Glory Middleweight Championship twice" },
+    { year: 2019, text: "Wins the interim Glory Light Heavyweight Championship" },
   ];
 
-  const container = d3.select("#timeline");
-
-  // Initial dimensions
-  let containerWidth = container.node().getBoundingClientRect().width;
-  let width = containerWidth;
-  let height = window.innerHeight * 0.3;
-  let padding = width * 0.05;
-
-  // Create the SVG
-  const svg = container
+  // Create the SVG container
+  const svg = d3
+    .select("#timeline")
     .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .classed("bg-gray-100", true);
+    .attr("width", "100%")
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .style("max-width", `${width}px`)
+    .style("display", "block")
+    .style("margin", "0 auto");
 
-  // Define the xScale
+  // Scales for positioning
   const xScale = d3
-    .scaleLinear()
-    .domain([0, kickboxingDataset.length])
-    .range([padding, width - padding]);
+    .scalePoint()
+    .domain(timelineData.map((d) => d.year))
+    .range([margin.left, width - margin.right])
+    .padding(0.1); // Adjusted padding for more space between circles
 
-  // Draw rectangles
-  const drawRects = () => {
-    svg
-      .selectAll("rect")
-      .data(kickboxingDataset)
-      .join("rect")
-      .attr("x", (_, i) => xScale(i))
-      .attr("y", height / 2 - 20)
-      .attr("width", (_, i) => xScale(i + 1) - xScale(i))
-      .attr("height", height * 0.1)
-      .attr("fill", (d) =>
-        d.izzy_fight ? "#006400" : d.result ? "#90EE90" : "#FF9999"
-      );
-  };
+  const circleRadius = 60;
+  const lineOffset = circleRadius + 3; // Adjust line offset to stop before the circles
 
-  // Add text labels for Izzy fights
-  const drawLabels = () => {
-    svg
-      .selectAll("text")
-      .data(kickboxingDataset.filter((d) => d.izzy_fight))
-      .join("text")
-      .attr("x", (_, i) => xScale(kickboxingDataset.findIndex((d) => d.izzy_fight && i-- === 0)) + 20)
-      .attr("y", height / 2 + height * 0.15)
-      .attr("text-anchor", "middle")
-      .attr("font-size", "clamp(0.75rem, 1.5vw, 0.5rem)")
-      .classed("text-gray-700", true)
-      .text((_, i) => `Izzy Fight ${i + 1}`);
-  };
+  // Draw the yellow line segments
+  const yellowLines = [];
+  for (let i = 0; i < timelineData.length - 1; i++) {
+    const line = svg
+      .append("line")
+      .attr("x1", xScale(timelineData[i].year) + lineOffset)
+      .attr("y1", height / 2)
+      .attr("x2", xScale(timelineData[i + 1].year) - lineOffset)
+      .attr("y2", height / 2)
+      .attr("stroke", "#FFD700")
+      .attr("stroke-width", 8)
+      .style("opacity", 0.3);
+    yellowLines.push(line);
+  }
 
-  // Draw initial visualization
-  drawRects();
-  drawLabels();
+  // Add line segments extending beyond the first and last circles
+  const leftLine = svg
+    .append("line")
+    .attr("x1", margin.left / 2)
+    .attr("y1", height / 2)
+    .attr("x2", xScale(timelineData[0].year) - lineOffset)
+    .attr("y2", height / 2)
+    .attr("stroke", "#FFD700")
+    .attr("stroke-width", 8)
+    .style("opacity", 0.3);
 
-  // Resize listener
-  window.addEventListener("resize", () => {
-    containerWidth = container.node().getBoundingClientRect().width;
-    width = containerWidth;
-    height = window.innerHeight * 0.3;
-    padding = width * 0.05;
+  const rightLine = svg
+    .append("line")
+    .attr("x1", xScale(timelineData[timelineData.length - 1].year) + lineOffset)
+    .attr("y1", height / 2)
+    .attr("x2", width - margin.right / 2)
+    .attr("y2", height / 2)
+    .attr("stroke", "#FFD700")
+    .attr("stroke-width", 8)
+    .style("opacity", 0.3);
 
-    // Update scales
-    xScale.range([padding, width - padding]);
+  // Add the green segment between Izzy fight circles
+  const greenLine = svg
+    .append("line")
+    .attr("x1", xScale(2016) + lineOffset)
+    .attr("y1", height / 2)
+    .attr("x2", xScale(2017) - lineOffset)
+    .attr("y2", height / 2)
+    .attr("stroke", "green")
+    .attr("stroke-width", 8)
+    .style("opacity", 1);
 
-    // Update SVG size
-    svg.attr("width", width).attr("height", height);
+  // Add circles
+  const circles = svg
+    .selectAll("circle")
+    .data(timelineData)
+    .enter()
+    .append("circle")
+    .attr("cx", (d) => xScale(d.year))
+    .attr("cy", height / 2)
+    .attr("r", circleRadius)
+    .attr("fill", (d) => (d.izzyFight ? "green" : "white"))
+    .attr("stroke", (d) => (d.izzyFight ? "green" : "#FFD700"))
+    .attr("stroke-width", 8)
+    .style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
 
-    // Redraw rectangles and labels
-    drawRects();
-    drawLabels();
-  });
+  // Add years below circles
+  const yearText = svg
+    .selectAll(".year-text")
+    .data(timelineData)
+    .enter()
+    .append("text")
+    .attr("x", (d) => xScale(d.year))
+    .attr("y", height / 2 + 160) // More space below circles
+    .attr("text-anchor", "middle")
+    .attr("font-size", "2.5em") // Larger font for years
+    .attr("fill", "black")
+    .style("opacity", (d) => (d.izzyFight ? 1 : 0.3))
+    .text((d) => d.year);
+
+  // Add text above circles
+  const eventText = svg
+    .selectAll(".event-text")
+    .data(timelineData)
+    .enter()
+    .append("text")
+    .attr("x", (d) => xScale(d.year))
+    .attr("y", height / 2 - 180) // More space above circles
+    .attr("text-anchor", "middle")
+    .attr("font-size", "1.3em")
+    .attr("fill", "black")
+    .style("opacity", (d) => (d.izzyFight ? 1 : 0.3))
+    .text((d) => d.text)
+    .call(wrapText, 200); // Adjust wrap width for larger spacing
+
+  // Add hover effects with transitions
+  circles
+    .on("mouseover", function (event, d) {
+      if (d.izzyFight) {
+        // Highlight Izzy fight elements
+        circles.transition().duration(200).style("opacity", (data) => (data.izzyFight ? 1 : 0.3));
+        yearText.transition().duration(200).style("opacity", (data) => (data.izzyFight ? 1 : 0.3));
+        eventText.transition().duration(200).style("opacity", (data) => (data.izzyFight ? 1 : 0.3));
+        greenLine.transition().duration(200).style("opacity", 1);
+        yellowLines.forEach((line) => line.transition().duration(200).style("opacity", 0.3));
+        leftLine.transition().duration(200).style("opacity", 0.3);
+        rightLine.transition().duration(200).style("opacity", 0.3);
+      } else {
+        // Highlight non-Izzy fight elements
+        circles.transition().duration(200).style("opacity", (data) => (data === d ? 1 : 0.3));
+        yearText.transition().duration(200).style("opacity", (data) => (data === d ? 1 : 0.3));
+        eventText.transition().duration(200).style("opacity", (data) => (data === d ? 1 : 0.3));
+        yellowLines.forEach((line, i) => {
+          const related = timelineData[i] === d || timelineData[i + 1] === d;
+          line.transition().duration(200).style("opacity", related ? 1 : 0.3);
+        });
+        leftLine.transition().duration(200).style("opacity", d === timelineData[0] ? 1 : 0.3);
+        rightLine.transition().duration(200).style("opacity", d === timelineData[timelineData.length - 1] ? 1 : 0.3);
+        greenLine.transition().duration(200).style("opacity", 0.3);
+      }
+    })
+    .on("mouseout", function () {
+      // Reset opacity for all elements
+      circles.transition().duration(200).style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
+      yearText.transition().duration(200).style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
+      eventText.transition().duration(200).style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
+      greenLine.transition().duration(200).style("opacity", 1);
+      yellowLines.forEach((line) => line.transition().duration(200).style("opacity", 0.3));
+      leftLine.transition().duration(200).style("opacity", 0.3);
+      rightLine.transition().duration(200).style("opacity", 0.3);
+    });
+
+  // Helper function to wrap text
+  function wrapText(selection, width) {
+    selection.each(function () {
+      const text = d3.select(this);
+      const words = text.text().split(/\s+/).reverse();
+      let word;
+      let line = [];
+      let lineNumber = 0;
+      const lineHeight = 1.2; // ems
+      const y = text.attr("y");
+      const dy = 0;
+      let tspan = text
+        .text(null)
+        .append("tspan")
+        .attr("x", text.attr("x"))
+        .attr("y",y)
+        .attr("dy", dy + "em");
+
+      while ((word = words.pop())) {
+        line.push(word);
+        tspan.text(line.join(" "));
+        if (tspan.node().getComputedTextLength() > width) {
+          line.pop();
+          tspan.text(line.join(" "));
+          line = [word];
+          tspan = text
+            .append("tspan")
+            .attr("x", text.attr("x"))
+            .attr("y", y)
+            .attr("dy", ++lineNumber * lineHeight + dy + "em")
+            .text(word);
+        }
+      }
+    });
+  }
 }
 
-drawVis();
+drawTimeline();
