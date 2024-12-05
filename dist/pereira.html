@@ -36,7 +36,7 @@
         </ul>
       </nav> <!-- End Nav -->
 
-      <main class="space-y-10">
+      <main> <!-- Increased space-y for more spacing between sections -->
         
         <section id="context" class="space-y-6"> <!-- Context Section -->
           <h2 class="text-2xl font-bold text-gray-800">Who is Alex Pereira, and What is the UFC?</h2>
@@ -46,11 +46,10 @@
             </p>
           </article>
         </section>
-
-        <section id="captivating-rivalry" class="space-y-6"> <!-- A Captivating Rivalry -->
-          <h2 class="text-2xl font-bold text-gray-800">A Captivating Rivalry</h2>
-          
+      
+        <section id="captivating-rivalry" class="space-y-16 my-16"> <!-- A Captivating Rivalry -->  
           <article class="space-y-4"> <!-- Kickboxing Career -->
+            <h2 class="text-2xl font-bold text-gray-800">A Captivating Rivalry</h2>
             <p>Before his UFC reign, Pereira had a stellar run in kickboxing.</p>
             <h3 class="text-xl font-semibold text-gray-700">Alex Pereira Kickboxing Career Timeline</h3>
             <div class="w-full">
@@ -58,25 +57,31 @@
             </div>
             <p>Pereira defeated Israel Adesanya twice, once by knockout, during his kickboxing career.</p>
           </article>
-
+      
           <article class="space-y-4"> <!-- Izzy's success and rise -->
             <p>Izzy shifted away from kickboxing after his second loss to Pereira. He would go on to find immense success and popularity in the UFC.</p>
             <h3 class="text-xl font-semibold text-gray-700">Israel Adesanya MMA Wins and Instagram Followers</h3>
             <div id="izzy" class="mt-10"></div> <!-- Izzy Vis Container -->
             <p>Izzy rose to meteoric popularity as he continued to dominate in the UFC.</p>
           </article>
-
-          <article class="space-y-4"> <!-- Quotes -->
+      
+          <article class="space-y-8"> <!-- Quotes -->
             <p>Adesanya had words for Pereira in a 2018 interview with Sporting News Australia.</p>
-            <blockquote id="izzy-quotes" class="bg-gray-200 p-4 italic border-l-4 border-gray-800">
-              “No one knows who the f*ck he is. When I'm a legend, he’s going to be at some pub talking some sh*t about I beat that guy one time.”
-            </blockquote>
-            <p>Pereira did not take that too kindly...</p>
-            <blockquote id="pereira-quotes" class="bg-gray-200 p-4 italic border-l-4 border-yellow-400">
+            
+            <!-- Izzy's Quote -->
+            <p class="text-5xl font-bold text-green-600 text-left">
+              “No one knows who the f*ck he is. When I'm a legend, he’s going to be at some pub talking some sh*t about I beat that guy one time”
+            </p>
+            
+            <p class="text-xl text-gray-600">Pereira did not take that too kindly...</p>
+            
+            <!-- Pereira's Quote -->
+            <p class="text-5xl font-bold text-yellow-500 text-right">
               “There is…an interview with Israel Adesanya that motivated me so much. I felt challenged. And whenever there is a challenge, no one can hold me back.”
-            </blockquote>
+            </p>
           </article>
-
+          
+      
           <article class="space-y-4"> <!-- Adesanya v Pereira -->
             <p>Pereira focused on MMA, where he dismantled his competition. He was fast-tracked to the UFC and a match against current UFC Middleweight Champion and past rival, Israel Adesanya.</p>
             <h3 class="text-xl font-semibold text-gray-700">UFC 281: Adesanya vs. Pereira</h3>
@@ -84,26 +89,27 @@
             <p>After already defeating him twice in another sport, Pereira found his way to Adesanya in the UFC and knocked him out.</p>
           </article>
         </section>
-
-        <section id="human-highlight" class="space-y-6"> <!-- Human Highlight -->
+      
+        <section id="human-highlight" class="space-y-6 my-16"> <!-- Human Highlight -->
           <h3 class="text-xl font-semibold text-gray-700">Knockout Artist</h3>
           <div id="pie-charts" class="mt-10"></div> <!-- Pie Charts -->
           <p>Pereira has a greater percentage of knockouts as his wins than any other champion of a men's division in the UFC.</p>
         </section>
-
-        <section id="elite-activity" class="space-y-6"> <!-- Elite Activity -->
+      
+        <section id="elite-activity" class="space-y-6 my-16"> <!-- Elite Activity -->
           <h3 class="text-xl font-semibold text-gray-700">Fastest Ever to Three Title Defenses</h3>
           <div id="bar-chart" class="mt-10"></div> <!-- Activity Chart -->
           <p>Pereira broke Ronda Rousey's record when he achieved three title defenses in 175 days.</p>
         </section>
-
-        <section id="greatness" class="space-y-6"> <!-- Greatness -->
+      
+        <section id="greatness" class="space-y-6 my-16"> <!-- Greatness -->
           <h3 class="text-xl font-semibold text-gray-700">Greatness</h3>
           <div id="scatterplot" class="mt-10"></div> <!-- Strike Accuracy Plot -->
           <p>Pereira is arguably the best striker in the history of the UFC. He has a higher striking accuracy than some of the most highly regarded strikers ever.</p>
         </section>
       
       </main>
+      
     </div>
 
     <script type="module" src="timeline-vis.js"></script>
