@@ -56,18 +56,21 @@ async function drawVis() {
     const barHeight = yScale.bandwidth() / barHeightFactor;
 
     // Tooltip
+    const fontSizeTooltip = window.innerWidth < 500 ? "16px" : "12px";
+
     const tooltip = d3
       .select("body")
       .append("div")
       .style("position", "absolute")
-      .style("background", "rgba(0, 0, 0, 0.7)")
+      .style("background-color", "rgba(0, 0, 0, 0.7)")
       .style("color", "white")
-      .style("padding", "5px 10px")
-      .style("border-radius", "4px")
-      .style("pointer-events", "none")
-      .style("opacity", 0);
+      .style("padding", "8px")
+      .style("border-radius", "5px")
+      .style("font-size", fontSizeTooltip)
+      .style("display", "none")
+      .style("pointer-events", "none");
 
-    // Add Alex's bars
+    // Add Alex's bars with transitions
     rounds
       .append("rect")
       .attr("x", xScale(0))
@@ -77,20 +80,32 @@ async function drawVis() {
       .attr("fill", (d) => (d.round === 5 ? "#ebac00" : "lightgray"))
       .attr("opacity", (d) => (d.round === 5 ? 1 : 0.3))
       .on("mouseover", function (event, d) {
-        d3.select(this).attr("fill", "#ffcc00").attr("opacity", 1);
-        tooltip.style("opacity", 1).html(`Round ${d.round}<br>Alex: ${d.alex_strikes}`);
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr("fill", "#ffcc00")
+          .attr("opacity", 1);
+
+        tooltip
+          .style("display", "block")
+          .html(`<strong>Round ${d.round}</strong><br>Alex: ${d.alex_strikes}`);
       })
       .on("mousemove", function (event) {
         tooltip
           .style("left", `${event.pageX + 10}px`)
-          .style("top", `${event.pageY - 20}px`);
+          .style("top", `${event.pageY - 28}px`);
       })
       .on("mouseout", function (event, d) {
-        d3.select(this).attr("fill", d.round === 5 ? "#ebac00" : "lightgray").attr("opacity", d.round === 5 ? 1 : 0.3);
-        tooltip.style("opacity", 0);
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr("fill", d.round === 5 ? "#ebac00" : "lightgray")
+          .attr("opacity", d.round === 5 ? 1 : 0.3);
+
+        tooltip.style("display", "none");
       });
 
-    // Add Izzy's bars
+    // Add Izzy's bars with transitions
     rounds
       .append("rect")
       .attr("x", xScale(0))
@@ -100,27 +115,40 @@ async function drawVis() {
       .attr("fill", (d) => (d.round === 5 ? "green" : "#a9a9a9"))
       .attr("opacity", (d) => (d.round === 5 ? 1 : 0.3))
       .on("mouseover", function (event, d) {
-        d3.select(this).attr("fill", "#00cc44").attr("opacity", 1);
-        tooltip.style("opacity", 1).html(`Round ${d.round}<br>Izzy: ${d.izzy_strikes}`);
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr("fill", "#00cc44")
+          .attr("opacity", 1);
+
+        tooltip
+          .style("display", "block")
+          .html(`<strong>Round ${d.round}</strong><br>Izzy: ${d.izzy_strikes}`);
       })
       .on("mousemove", function (event) {
         tooltip
           .style("left", `${event.pageX + 10}px`)
-          .style("top", `${event.pageY - 20}px`);
+          .style("top", `${event.pageY - 28}px`);
       })
       .on("mouseout", function (event, d) {
-        d3.select(this).attr("fill", d.round === 5 ? "green" : "#a9a9a9").attr("opacity", d.round === 5 ? 1 : 0.3);
-        tooltip.style("opacity", 0);
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr("fill", d.round === 5 ? "green" : "#a9a9a9")
+          .attr("opacity", d.round === 5 ? 1 : 0.3);
+
+        tooltip.style("display", "none");
       });
 
-    const fontSize = width < 600 ? "10px" : "12px";
+    const fontSizeAxis = window.innerWidth < 500 ? "14px" : "12px";
+    const fontSizeLabel = window.innerWidth < 500 ? "16px" : "14px";
 
     // Add x-axis
     svg
       .append("g")
       .attr("transform", `translate(0,${height - margin.bottom - legendHeight})`)
       .call(d3.axisBottom(xScale).ticks(Math.min(5, width / 100)))
-      .attr("font-size", fontSize);
+      .attr("font-size", fontSizeAxis);
 
     // Add x-axis label
     svg
@@ -128,7 +156,7 @@ async function drawVis() {
       .attr("x", width / 2)
       .attr("y", height - margin.bottom + 15)
       .attr("text-anchor", "middle")
-      .attr("font-size", width < 600 ? "12px" : "14px")
+      .attr("font-size", fontSizeLabel)
       .text("Significant Strikes");
 
     // Add y-axis
@@ -136,44 +164,7 @@ async function drawVis() {
       .append("g")
       .attr("transform", `translate(${margin.left},0)`)
       .call(d3.axisLeft(yScale))
-      .attr("font-size", fontSize);
-
-    // Add legend
-    const legend = svg
-      .append("g")
-      .attr("transform", `translate(${margin.left},${height - legendHeight + 10})`);
-
-    legend
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("width", 20)
-      .attr("height", 20)
-      .attr("fill", "#ebac00");
-
-    legend
-      .append("text")
-      .attr("x", 30)
-      .attr("y", 15)
-      .text("Alex Pereira")
-      .attr("font-size", fontSize)
-      .attr("alignment-baseline", "middle");
-
-    legend
-      .append("rect")
-      .attr("x", 120)
-      .attr("y", 0)
-      .attr("width", 20)
-      .attr("height", 20)
-      .attr("fill", "green");
-
-    legend
-      .append("text")
-      .attr("x", 150)
-      .attr("y", 15)
-      .text("Israel Adesanya")
-      .attr("font-size", fontSize)
-      .attr("alignment-baseline", "middle");
+      .attr("font-size", fontSizeAxis);
   }
 
   // Initial render
