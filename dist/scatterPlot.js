@@ -120,11 +120,13 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
             `<strong>${d.name}</strong><br>Strikes Attempted: ${d.strikesAttempted}<br>Striking Accuracy: ${d.strikingAccuracy}%`
           );
 
-        d3.select(this)
-          .transition()
-          .duration(300)
-          .attr("fill", "black")
-          .style("opacity", 1);
+        if (d.name !== "Alex Pereira") {
+          d3.select(this)
+            .transition()
+            .duration(300)
+            .attr("fill", "black")
+            .style("opacity", 1);
+        }
       })
       .on("mousemove", (event, d) => {
         const tooltipWidth = 150; // Approximate width of tooltip
