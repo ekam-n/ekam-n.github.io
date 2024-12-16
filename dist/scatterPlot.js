@@ -15,111 +15,152 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
   const height = 500;
   const margin = { top: 50, right: 85, bottom: 75, left: 75 };
 
-  const xScale = d3
-    .scaleLinear()
-    .domain([0, d3.max(fighterStats, (d) => d.strikesAttempted)])
-    .range([margin.left, width - margin.right]);
+  function drawChart() {
+    const container = d3.select("#scatterplot");
+    const containerWidth = container.node().clientWidth || width;
 
-  const yScale = d3
-    .scaleLinear()
-    .domain([0, d3.max(fighterStats, (d) => d.strikingAccuracy)])
-    .range([height - margin.bottom, margin.top]);
+    // Remove any existing SVG and tooltip
+    container.selectAll("svg").remove();
+    container.selectAll("div").remove();
 
-  const svg = d3
-    .select("#scatterplot")
-    .append("svg")
-    .attr("viewBox", `0 0 ${width} ${height}`)
-    .attr("preserveAspectRatio", "xMidYMid meet")
-    .style("width", "75%")
-    .style("height", "auto")
-    .style("display", "block")
-    .style("margin", "0 auto");
+    // Determine chart width percentage based on container width
+    let chartWidthPercentage = containerWidth < 700 ? "100%" : "75%";
 
-  // Add X-axis
-  svg
-    .append("g")
-    .attr("transform", `translate(0, ${height - margin.bottom})`)
-    .call(d3.axisBottom(xScale).ticks(5))
-    .selectAll("text")
-    .attr("text-anchor", "middle")
-    .style("font-size", "12px");
+    const isSmallScreen = window.innerWidth < 500;
+    const fontSize = isSmallScreen ? "16px" : "12px";
 
-  // X-axis label
-  svg
-    .append("text")
-    .attr("x", width / 2)
-    .attr("y", height - margin.bottom / 2)
-    .attr("text-anchor", "middle")
-    .style("font-size", "12px")
-    .text("Strikes Attempted per Minute");
+    const xScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(fighterStats, (d) => d.strikesAttempted)])
+      .range([margin.left, width - margin.right]);
 
-  // Add Y-axis
-  svg
-    .append("g")
-    .attr("transform", `translate(${margin.left}, 0)`)
-    .call(d3.axisLeft(yScale).ticks(5))
-    .selectAll("text")
-    .style("font-size", "12px");
+    const yScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(fighterStats, (d) => d.strikingAccuracy)])
+      .range([height - margin.bottom, margin.top]);
 
-  // Y-axis label
-  svg
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("x", -(height / 2.25))
-    .attr("y", margin.left / 2.25)
-    .attr("text-anchor", "middle")
-    .style("font-size", "12px")
-    .text("Striking Accuracy (%)");
+    const svg = container
+      .append("svg")
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("preserveAspectRatio", "xMidYMid meet")
+      .style("width", chartWidthPercentage)
+      .style("height", "auto")
+      .style("display", "block")
+      .style("margin", "0 auto");
 
-  // Tooltip
-  const tooltip = d3
-    .select("#scatterplot")
-    .append("div")
-    .style("position", "absolute")
-    .style("background-color", "rgba(0, 0, 0, 0.7)")
-    .style("color", "white")
-    .style("padding", "8px")
-    .style("border-radius", "5px")
-    .style("font-size", "12px")
-    .style("display", "none")
-    .style("pointer-events", "none");
+    // Add X-axis
+    svg
+      .append("g")
+      .attr("transform", `translate(0, ${height - margin.bottom})`)
+      .call(d3.axisBottom(xScale).ticks(5))
+      .selectAll("text")
+      .attr("text-anchor", "middle")
+      .style("font-size", fontSize); // Update font size dynamically
 
-  // Add circles with tooltips
-  svg
-    .selectAll("circle")
-    .data(fighterStats)
-    .enter()
-    .append("circle")
-    .attr("cx", (d) => xScale(d.strikesAttempted))
-    .attr("cy", (d) => yScale(d.strikingAccuracy))
-    .attr("r", 5)
-    .attr("fill", (d) => (d.name === "Alex Pereira" ? "#ebac00" : "rgba(210, 211, 210, 0.97)"))
-    .on("mouseover", (event, d) => {
-      tooltip
-        .style("display", "block")
-        .html(
-          `<strong>${d.name}</strong><br>Strikes Attempted: ${d.strikesAttempted}<br>Striking Accuracy: ${d.strikingAccuracy}%`
-        );
-    })
-    .on("mousemove", (event) => {
-      tooltip
-        .style("left", `${event.pageX + 10}px`)
-        .style("top", `${event.pageY - 28}px`);
-    })
-    .on("mouseout", () => {
-      tooltip.style("display", "none");
-    });
+    // X-axis label
+    svg
+      .append("text")
+      .attr("x", width / 2)
+      .attr("y", height - margin.bottom / 2 + 15)
+      .attr("text-anchor", "middle")
+      .style("font-size", fontSize) // Update font size dynamically
+      .text("Strikes Attempted per Minute");
 
-  // Add labels to points
-  svg
-    .selectAll("text.label")
-    .data(fighterStats)
-    .enter()
-    .append("text")
-    .attr("x", (d) => xScale(d.strikesAttempted) + 8)
-    .attr("y", (d) => yScale(d.strikingAccuracy) + 3)
-    .attr("font-size", "10px")
-    .attr("fill", "#333")
-    .text((d) => d.name)
-    .classed("label", true);
+    // Add Y-axis
+    svg
+      .append("g")
+      .attr("transform", `translate(${margin.left}, 0)`)
+      .call(d3.axisLeft(yScale).ticks(5))
+      .selectAll("text")
+      .style("font-size", fontSize); // Update font size dynamically
+
+    // Y-axis label
+    svg
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -(height / 2.25))
+      .attr("y", margin.left / 2.25 - 15)
+      .attr("text-anchor", "middle")
+      .style("font-size", fontSize) // Update font size dynamically
+      .text("Striking Accuracy (%)");
+
+    // Tooltip
+    const tooltip = container
+      .append("div")
+      .style("position", "absolute")
+      .style("background-color", "rgba(0, 0, 0, 0.7)")
+      .style("color", "white")
+      .style("padding", "8px")
+      .style("border-radius", "5px")
+      .style("font-size", fontSize) // Update font size dynamically
+      .style("display", "none")
+      .style("pointer-events", "none");
+
+    // Add circles with tooltips and hover effects
+    svg
+      .selectAll("circle")
+      .data(fighterStats)
+      .enter()
+      .append("circle")
+      .attr("cx", (d) => xScale(d.strikesAttempted))
+      .attr("cy", (d) => yScale(d.strikingAccuracy))
+      .attr("r", isSmallScreen ? 8 : 5) // Increase radius for smaller screens
+      .attr("fill", (d) => (d.name === "Alex Pereira" ? "#ebac00" : "rgba(210, 211, 210, 0.97)"))
+      .style("opacity", 0.97)
+      .on("mouseover", function (event, d) {
+        tooltip
+          .style("display", "block")
+          .html(
+            `<strong>${d.name}</strong><br>Strikes Attempted: ${d.strikesAttempted}<br>Striking Accuracy: ${d.strikingAccuracy}%`
+          );
+
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr("fill", "black")
+          .style("opacity", 1);
+      })
+      .on("mousemove", (event, d) => {
+        const tooltipWidth = 150; // Approximate width of tooltip
+        const tooltipDirection = d.strikesAttempted > 3 ? "left" : "right";
+        const xPosition = tooltipDirection === "left"
+          ? event.pageX - tooltipWidth - 10
+          : event.pageX + 10;
+        
+        tooltip
+          .style("left", `${xPosition}px`)
+          .style("top", `${event.pageY - 28}px`);
+      })
+      .on("mouseout", function (event, d) {
+        tooltip.style("display", "none");
+
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr("fill", (d) => (d.name === "Alex Pereira" ? "#ebac00" : "rgba(210, 211, 210, 0.97)"))
+          .style("opacity", 0.97);
+      });
+
+    // Add labels to points
+    svg
+      .selectAll("text.label")
+      .data(fighterStats)
+      .enter()
+      .append("text")
+      .attr("x", (d) => xScale(d.strikesAttempted) + 8)
+      .attr("y", (d) => yScale(d.strikingAccuracy) + 3)
+      .attr("font-size", isSmallScreen ? "13px" : "10px") // Update font size dynamically
+      .attr("fill", "#333")
+      .text((d) => {
+        // Extract last name if screen is small, otherwise use full name
+        return isSmallScreen ? d.name.split(" ").slice(-1)[0] : d.name;
+      })
+      .classed("label", true);
+  }
+
+  // Initial draw
+  drawChart();
+
+  // Add a resize event to redraw the chart
+  window.addEventListener("resize", drawChart);
 })();
