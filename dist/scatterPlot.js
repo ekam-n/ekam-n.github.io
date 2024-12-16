@@ -28,8 +28,12 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
   const svg = d3
     .select("#scatterplot")
     .append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("width", "75%")
+    .style("height", "auto")
+    .style("display", "block")
+    .style("margin", "0 auto");
 
   // Add X-axis
   svg

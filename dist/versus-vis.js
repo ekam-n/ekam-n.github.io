@@ -23,11 +23,14 @@ async function drawVis() {
     // Clear previous visualization
     d3.select("#versus svg").remove();
 
+    // Create responsive SVG
     const svg = d3
       .select("#versus")
       .append("svg")
-      .attr("width", width)
-      .attr("height", height);
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("preserveAspectRatio", "xMidYMid meet")
+      .style("width", "100%")
+      .style("height", "auto");
 
     const xScale = d3
       .scaleLinear()
@@ -51,6 +54,18 @@ async function drawVis() {
 
     const barHeightFactor = width < 600 ? 3 : 4;
     const barHeight = yScale.bandwidth() / barHeightFactor;
+
+    // Tooltip
+    const tooltip = d3
+      .select("body")
+      .append("div")
+      .style("position", "absolute")
+      .style("background", "rgba(0, 0, 0, 0.7)")
+      .style("color", "white")
+      .style("padding", "5px 10px")
+      .style("border-radius", "4px")
+      .style("pointer-events", "none")
+      .style("opacity", 0);
 
     // Add Alex's bars
     rounds
@@ -159,18 +174,6 @@ async function drawVis() {
       .text("Israel Adesanya")
       .attr("font-size", fontSize)
       .attr("alignment-baseline", "middle");
-
-    // Tooltip
-    const tooltip = d3
-      .select("body")
-      .append("div")
-      .style("position", "absolute")
-      .style("background", "rgba(0, 0, 0, 0.7)")
-      .style("color", "white")
-      .style("padding", "5px 10px")
-      .style("border-radius", "4px")
-      .style("pointer-events", "none")
-      .style("opacity", 0);
   }
 
   // Initial render

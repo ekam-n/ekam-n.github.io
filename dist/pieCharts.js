@@ -18,11 +18,16 @@ const bottomPadding = 20; // Additional padding at the bottom
 const totalWidth = fighters.length * (width + 20); // Adjust for gap
 const containerHeight = height + namePadding + bottomPadding; // Calculate height dynamically
 
-// Create SVG container
+// remove the previous svg 
+d3.select("#pie-charts svg").remove();
+
+// Create SVG container with responsive sizing
 const svgContainer = d3.select("#pie-charts")
   .append("svg")
-  .attr("width", totalWidth)
-  .attr("height", containerHeight);
+  .attr("viewBox", `0 0 ${totalWidth} ${containerHeight}`)
+  .attr("preserveAspectRatio", "xMidYMid meet")
+  .style("width", "100%")
+  .style("height", "auto");
 
 // Tooltip setup
 const tooltip = d3.select("#pie-charts")

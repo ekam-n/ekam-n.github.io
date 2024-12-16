@@ -10,8 +10,10 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
   const svg = d3.select("#cleveland-dot-plot")
     .append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("width", "100%")
+    .style("height", "auto");
 
   // Convert dates to just month/day for x positioning
   const formatToYearlessDate = (d) => new Date(0, d.getMonth(), d.getDate());
@@ -69,7 +71,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
     .style("opacity", (d) => (d.fighter === "Alex Pereira" ? 1 : 0.5))
     .attr("class", (d) => (d.fighter === "Alex Pereira" ? "alex-line" : "other-line"));
 
-  // Add dots for the first and third title defenses
+  // Helper function to add dots
   const addDots = (dataKey, className) => {
     svg
       .selectAll(`.${className}`)
@@ -100,78 +102,78 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
     .attr("fill", (d) => (d.fighter === "Alex Pereira" ? "black" : "#aaa"))
     .style("opacity", (d) => (d.fighter === "Alex Pereira" ? 1 : 0.5))
     .text((d) => d.fighter)
+    .attr("class", "name-label")
     .on("mouseover", (event, d) => {
-        // Highlight the associated line and dots
-        d3.selectAll(".other-line")
-          .filter((datum) => datum.fighter === d.fighter)
-          .transition()
-          .duration(300)
-          .style("opacity", 1)
-          .attr("stroke", "black");
-      
-        d3.selectAll(".other-dot")
-          .filter((datum) => datum.fighter === d.fighter)
-          .transition()
-          .duration(300)
-          .style("opacity", 1)
-          .attr("fill", "black");
-      
-        // Highlight the text label of the hovered fighter
-        d3.selectAll(".name-label")
-          .filter((datum) => datum.fighter === d.fighter)
-          .transition()
-          .duration(300)
-          .style("opacity", 1)
-          .style("fill", "black");
-      
-        // Tooltip setup
-        const tooltip = d3.select("#tooltip");
-        if (tooltip.empty()) {
-          d3.select("#cleveland-dot-plot")
-            .append("div")
-            .attr("id", "tooltip")
-            .style("position", "absolute")
-            .style("background-color", "rgba(0, 0, 0, 0.7)")
-            .style("color", "white")
-            .style("padding", "5px")
-            .style("border-radius", "4px")
-            .style("font-size", "12px")
-            .style("pointer-events", "none");
-        }
-      
-        d3.select("#tooltip")
-          .style("display", "block")
-          .html(`<strong>${d.fighter}</strong><br>Days: ${d.number_days}`)
-          .style("left", `${event.pageX + 10}px`)
-          .style("top", `${event.pageY + 10}px`);
-      })
-      .on("mouseout", (event, d) => {
-        // Reset the associated line and dots
-        d3.selectAll(".other-line")
-          .filter((datum) => datum.fighter === d.fighter)
-          .transition()
-          .duration(300)
-          .style("opacity", 0.5)
-          .attr("stroke", "#aaa");
-      
-        d3.selectAll(".other-dot")
-          .filter((datum) => datum.fighter === d.fighter)
-          .transition()
-          .duration(300)
-          .style("opacity", 0.5)
-          .attr("fill", "#aaa");
-      
-        // Reset the text label of the fighter
-        d3.selectAll(".name-label")
-          .filter((datum) => datum.fighter === d.fighter)
-          .transition()
-          .duration(300)
-          .style("opacity", 0.5)
-          .style("fill", "#aaa");
-      
-        // Hide tooltip
-        d3.select("#tooltip").style("display", "none");
-      });
-      
-      
+      // Highlight the associated line and dots for the hovered fighter
+      d3.selectAll(".other-line")
+        .filter((datum) => datum.fighter === d.fighter)
+        .transition()
+        .duration(300)
+        .style("opacity", 1)
+        .attr("stroke", "black");
+
+      d3.selectAll(".other-dot")
+        .filter((datum) => datum.fighter === d.fighter)
+        .transition()
+        .duration(300)
+        .style("opacity", 1)
+        .attr("fill", "black");
+
+      // Highlight the hovered fighter's name
+      d3.selectAll(".name-label")
+        .filter((datum) => datum.fighter === d.fighter)
+        .transition()
+        .duration(300)
+        .style("opacity", 1)
+        .style("fill", "black");
+
+      // Tooltip setup
+      let tooltip = d3.select("#tooltip");
+      if (tooltip.empty()) {
+        tooltip = d3.select("#cleveland-dot-plot")
+          .append("div")
+          .attr("id", "tooltip")
+          .style("position", "absolute")
+          .style("background-color", "rgba(0, 0, 0, 0.7)")
+          .style("color", "white")
+          .style("padding", "5px")
+          .style("border-radius", "4px")
+          .style("font-size", "12px")
+          .style("pointer-events", "none");
+      }
+
+      tooltip
+        .style("display", "block")
+        .html(`<strong>${d.fighter}</strong><br>Days: ${d.number_days}`)
+        .style("left", `${event.pageX + 10}px`)
+        .style("top", `${event.pageY + 10}px`);
+    })
+    .on("mouseout", (event, d) => {
+      // Reset the associated line and dots
+      d3.selectAll(".other-line")
+        .filter((datum) => datum.fighter === d.fighter)
+        .transition()
+        .duration(300)
+        .style("opacity", 0.5)
+        .attr("stroke", "#aaa");
+
+      d3.selectAll(".other-dot")
+        .filter((datum) => datum.fighter === d.fighter)
+        .transition()
+        .duration(300)
+        .style("opacity", 0.5)
+        .attr("fill", "#aaa");
+
+      // Reset the text label of the fighter
+      d3.selectAll(".name-label")
+        .filter((datum) => datum.fighter === d.fighter)
+        .transition()
+        .duration(300)
+        .style("opacity", (datum) => (datum.fighter === "Alex Pereira" ? 1 : 0.5))
+        .style("fill", (datum) => (datum.fighter === "Alex Pereira" ? "black" : "#aaa"));
+
+      // Hide tooltip
+      d3.select("#tooltip").style("display", "none");
+    });
+
 })();
