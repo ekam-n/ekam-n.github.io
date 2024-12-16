@@ -27,6 +27,9 @@ async function drawVis() {
   const draw = () => {
     width = container.node().getBoundingClientRect().width;
 
+    // Calculate number of ticks based on width
+    const numTicks = Math.max(2, Math.floor(width / 100)); // Dynamically set tick count
+
     // Scales for cumulative wins
     const xScaleWins = d3
       .scaleTime()
@@ -58,7 +61,7 @@ async function drawVis() {
     svgWins
       .append("g")
       .attr("transform", `translate(0, ${height - margin.bottom})`)
-      .call(d3.axisBottom(xScaleWins).tickFormat(d3.timeFormat("%b %Y")));
+      .call(d3.axisBottom(xScaleWins).ticks(numTicks).tickFormat(d3.timeFormat("%Y"))); // Dynamic ticks and only show year
 
     svgWins
       .append("g")
@@ -79,7 +82,7 @@ async function drawVis() {
     svgFollowers
       .append("g")
       .attr("transform", `translate(0, ${height - margin.bottom})`)
-      .call(d3.axisBottom(xScaleFollowers).tickFormat(d3.timeFormat("%b %Y")));
+      .call(d3.axisBottom(xScaleFollowers).ticks(numTicks).tickFormat(d3.timeFormat("%b %Y"))); // Dynamic ticks and only show year
 
     svgFollowers
       .append("g")
@@ -131,31 +134,29 @@ async function drawVis() {
     // Add dot annotation for March 4, 2017
     const annotationDate = new Date(2017, 2, 4); // March 4, 2017 (month is 0-indexed)
 
-      console.log("hi");
-      svgWins
-        .append("circle")
-        .attr("cx", xScaleWins(annotationDate))
-        .attr("cy", yScaleWins(9.6))
-        .attr("r", 6)
-        .attr("fill", "black")
-        .attr("stroke", "black")
-        .attr("stroke-width", 2);
+    svgWins
+      .append("circle")
+      .attr("cx", xScaleWins(annotationDate))
+      .attr("cy", yScaleWins(9.6))
+      .attr("r", 6)
+      .attr("fill", "black")
+      .attr("stroke", "black")
+      .attr("stroke-width", 2);
 
-      svgWins
-        .append("text")
-        .attr("x", xScaleWins(annotationDate))
-        .attr("y", yScaleWins(9.6) + 30) // Slightly below the dot
-        .attr("text-anchor", "start")
-        .attr("font-size", "12px")
-        .attr("fill", "black")
-        .selectAll("tspan")
-        .data(["Izzy's last kickboxing match,", "a KO-loss to Pereira"]) // Split the text into two lines
-        .enter()
-        .append("tspan")
-        .attr("x", xScaleWins(annotationDate)) // Same x position for both lines
-        .attr("dy", (d, i) => i === 0 ? "0em" : "1.2em") // First line stays in position, second line moves down
-        .text(d => d);
-
+    svgWins
+      .append("text")
+      .attr("x", xScaleWins(annotationDate))
+      .attr("y", yScaleWins(9.6) + 30) // Slightly below the dot
+      .attr("text-anchor", "start")
+      .attr("font-size", "12px")
+      .attr("fill", "black")
+      .selectAll("tspan")
+      .data(["Izzy's last kickboxing match,", "a KO-loss to Pereira"]) // Split the text into two lines
+      .enter()
+      .append("tspan")
+      .attr("x", xScaleWins(annotationDate)) // Same x position for both lines
+      .attr("dy", (d, i) => i === 0 ? "0em" : "1.2em") // First line stays in position, second line moves down
+      .text(d => d);
   };
 
   // Initial draw
