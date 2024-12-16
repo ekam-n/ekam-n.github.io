@@ -26,17 +26,23 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
     // Determine chart width percentage based on container width
     let chartWidthPercentage = containerWidth < 700 ? "100%" : "75%";
 
+    // Check if the screen width is less than 500px
     const isSmallScreen = window.innerWidth < 500;
     const fontSize = isSmallScreen ? "16px" : "12px";
 
+    // Remove "Max Holloway" and "Stephen Thompson" below 500px
+    const filteredFighterStats = isSmallScreen
+      ? fighterStats.filter((d) => d.name !== "Max Holloway" && d.name !== "Stephen Thompson")
+      : fighterStats;
+
     const xScale = d3
       .scaleLinear()
-      .domain([0, d3.max(fighterStats, (d) => d.strikesAttempted)])
+      .domain([0, d3.max(filteredFighterStats, (d) => d.strikesAttempted)])
       .range([margin.left, width - margin.right]);
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(fighterStats, (d) => d.strikingAccuracy)])
+      .domain([0, d3.max(filteredFighterStats, (d) => d.strikingAccuracy)])
       .range([height - margin.bottom, margin.top]);
 
     const svg = container
@@ -99,7 +105,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
     // Add circles with tooltips and hover effects
     svg
       .selectAll("circle")
-      .data(fighterStats)
+      .data(filteredFighterStats)
       .enter()
       .append("circle")
       .attr("cx", (d) => xScale(d.strikesAttempted))
@@ -144,12 +150,12 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
     // Add labels to points
     svg
       .selectAll("text.label")
-      .data(fighterStats)
+      .data(filteredFighterStats)
       .enter()
       .append("text")
       .attr("x", (d) => xScale(d.strikesAttempted) + 8)
       .attr("y", (d) => yScale(d.strikingAccuracy) + 3)
-      .attr("font-size", isSmallScreen ? "13px" : "10px") // Update font size dynamically
+      .attr("font-size", isSmallScreen ? "14px" : "10px") // Update font size dynamically
       .attr("fill", "#333")
       .text((d) => {
         // Extract last name if screen is small, otherwise use full name
