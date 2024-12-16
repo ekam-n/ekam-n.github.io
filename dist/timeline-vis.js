@@ -1,12 +1,12 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 async function drawTimeline() {
-  const width = 1600; // Increased width for more spacing
+  const initialWidth = 1600; // Increased width for more spacing
   const height = 500; // Increased height for better proportions
   const margin = { top: 150, right: 150, bottom: 150, left: 150 };
 
   // Data for the timeline
-  const timelineData = [
+  const fullTimelineData = [
     { year: 2014, text: "Wins Glory Middleweight Contender Tournament" },
     { year: 2015, text: "Wins WGP Kickboxing 85kg title" },
     { year: 2016, text: "Defeats Israel Adesanya by decision", izzyFight: true },
@@ -15,8 +15,39 @@ async function drawTimeline() {
     { year: 2019, text: "Wins the interim Glory Light Heavyweight Championship" },
   ];
 
-  // Create the SVG container
-  const svg = d3
+  function getResponsiveData() {
+    const screenWidth = window.innerWidth;
+    const izzyFightIndices = fullTimelineData.map((d, i) => d.izzyFight ? i : null).filter(i => i !== null);
+  
+    if (screenWidth < 600) {
+      // Show only the 2 Izzy fights
+      return fullTimelineData.slice(izzyFightIndices[0], izzyFightIndices[1] + 1);
+    } else if (screenWidth < 900) {
+      // Show 4 events: 1 before, 2 Izzy fights, 1 after
+      const start = Math.max(izzyFightIndices[0] - 1, 0);
+      const end = Math.min(izzyFightIndices[1] + 1, fullTimelineData.length - 1);
+      return fullTimelineData.slice(start, end + 1);
+    } else {
+      // Show all events on larger screens
+      return fullTimelineData;
+    }
+  }
+  
+
+  function draw() {
+
+    const timelineData = getResponsiveData();
+    const width = window.innerWidth < 600 
+  ? 800 // For screens smaller than 600px
+  : window.innerWidth < 900 
+    ? 1000 // For screens between 600px and 900px
+    : initialWidth; // For larger screens
+
+
+    d3.select("#timeline").selectAll("svg").remove() 
+
+    // Create the SVG container
+    const svg = d3
     .select("#timeline")
     .append("svg")
     .attr("width", "100%")
@@ -25,142 +56,144 @@ async function drawTimeline() {
     .style("display", "block")
     .style("margin", "0 auto");
 
-  // Scales for positioning
-  const xScale = d3
-    .scalePoint()
-    .domain(timelineData.map((d) => d.year))
-    .range([margin.left, width - margin.right])
-    .padding(0.1); // Adjusted padding for more space between circles
+    // Scales for positioning
+    const xScale = d3
+      .scalePoint()
+      .domain(timelineData.map((d) => d.year))
+      .range([margin.left, width - margin.right])
+      .padding(0.1); // Adjusted padding for more space between circles
 
-  const circleRadius = 60;
-  const lineOffset = circleRadius + 3; // Adjust line offset to stop before the circles
+    const circleRadius = 60;
+    const lineOffset = circleRadius + 3; // Adjust line offset to stop before the circles
 
-  // Draw the yellow line segments
-  const yellowLines = [];
-  for (let i = 0; i < timelineData.length - 1; i++) {
-    const line = svg
+    // Draw the yellow line segments
+    const yellowLines = [];
+    for (let i = 0; i < timelineData.length - 1; i++) {
+      const line = svg
+        .append("line")
+        .attr("x1", xScale(timelineData[i].year) + lineOffset)
+        .attr("y1", height / 2)
+        .attr("x2", xScale(timelineData[i + 1].year) - lineOffset)
+        .attr("y2", height / 2)
+        .attr("stroke", "#ebac00")
+        .attr("stroke-width", 8)
+        .style("opacity", 0.3);
+      yellowLines.push(line);
+    }
+
+    // Add line segments extending beyond the first and last circles
+    const leftLine = svg
       .append("line")
-      .attr("x1", xScale(timelineData[i].year) + lineOffset)
+      .attr("x1", margin.left / 2)
       .attr("y1", height / 2)
-      .attr("x2", xScale(timelineData[i + 1].year) - lineOffset)
+      .attr("x2", xScale(timelineData[0].year) - lineOffset)
       .attr("y2", height / 2)
       .attr("stroke", "#ebac00")
       .attr("stroke-width", 8)
       .style("opacity", 0.3);
-    yellowLines.push(line);
-  }
 
-  // Add line segments extending beyond the first and last circles
-  const leftLine = svg
-    .append("line")
-    .attr("x1", margin.left / 2)
-    .attr("y1", height / 2)
-    .attr("x2", xScale(timelineData[0].year) - lineOffset)
-    .attr("y2", height / 2)
-    .attr("stroke", "#ebac00")
-    .attr("stroke-width", 8)
-    .style("opacity", 0.3);
+    const rightLine = svg
+      .append("line")
+      .attr("x1", xScale(timelineData[timelineData.length - 1].year) + lineOffset)
+      .attr("y1", height / 2)
+      .attr("x2", width - margin.right / 2)
+      .attr("y2", height / 2)
+      .attr("stroke", "#ebac00")
+      .attr("stroke-width", 8)
+      .style("opacity", 0.3);
 
-  const rightLine = svg
-    .append("line")
-    .attr("x1", xScale(timelineData[timelineData.length - 1].year) + lineOffset)
-    .attr("y1", height / 2)
-    .attr("x2", width - margin.right / 2)
-    .attr("y2", height / 2)
-    .attr("stroke", "#ebac00")
-    .attr("stroke-width", 8)
-    .style("opacity", 0.3);
+    // Add the green segment between Izzy fight circles
+    const greenLine = svg
+      .append("line")
+      .attr("x1", xScale(2016) + lineOffset)
+      .attr("y1", height / 2)
+      .attr("x2", xScale(2017) - lineOffset)
+      .attr("y2", height / 2)
+      .attr("stroke", "green")
+      .attr("stroke-width", 8)
+      .style("opacity", 1);
 
-  // Add the green segment between Izzy fight circles
-  const greenLine = svg
-    .append("line")
-    .attr("x1", xScale(2016) + lineOffset)
-    .attr("y1", height / 2)
-    .attr("x2", xScale(2017) - lineOffset)
-    .attr("y2", height / 2)
-    .attr("stroke", "green")
-    .attr("stroke-width", 8)
-    .style("opacity", 1);
+    // Add circles
+    const circles = svg
+      .selectAll("circle")
+      .data(timelineData)
+      .enter()
+      .append("circle")
+      .attr("cx", (d) => xScale(d.year))
+      .attr("cy", height / 2)
+      .attr("r", circleRadius)
+      .attr("fill", (d) => (d.izzyFight ? "green" : "white"))
+      .attr("stroke", (d) => (d.izzyFight ? "green" : "#ebac00"))
+      .attr("stroke-width", 8)
+      .style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
 
-  // Add circles
-  const circles = svg
-    .selectAll("circle")
-    .data(timelineData)
-    .enter()
-    .append("circle")
-    .attr("cx", (d) => xScale(d.year))
-    .attr("cy", height / 2)
-    .attr("r", circleRadius)
-    .attr("fill", (d) => (d.izzyFight ? "green" : "white"))
-    .attr("stroke", (d) => (d.izzyFight ? "green" : "#ebac00"))
-    .attr("stroke-width", 8)
-    .style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
+    // Add years below circles
+    const yearText = svg
+      .selectAll(".year-text")
+      .data(timelineData)
+      .enter()
+      .append("text")
+      .attr("x", (d) => xScale(d.year))
+      .attr("y", height / 2 + 160) // More space below circles
+      .attr("text-anchor", "middle")
+      .attr("font-size", "2.5em") // Larger font for years
+      .attr("fill", "black")
+      .style("opacity", (d) => (d.izzyFight ? 1 : 0.3))
+      .text((d) => d.year);
 
-  // Add years below circles
-  const yearText = svg
-    .selectAll(".year-text")
-    .data(timelineData)
-    .enter()
-    .append("text")
-    .attr("x", (d) => xScale(d.year))
-    .attr("y", height / 2 + 160) // More space below circles
-    .attr("text-anchor", "middle")
-    .attr("font-size", "2.5em") // Larger font for years
-    .attr("fill", "black")
-    .style("opacity", (d) => (d.izzyFight ? 1 : 0.3))
-    .text((d) => d.year);
+    // Add text above circles
+    const eventText = svg
+      .selectAll(".event-text")
+      .data(timelineData)
+      .enter()
+      .append("text")
+      .attr("x", (d) => xScale(d.year))
+      .attr("y", height / 2 - 180) // More space above circles
+      .attr("text-anchor", "middle")
+      .attr("font-size", "1.3em")
+      .attr("fill", "black")
+      .style("opacity", (d) => (d.izzyFight ? 1 : 0.3))
+      .text((d) => d.text)
+      .call(wrapText, 200); // Adjust wrap width for larger spacing
 
-  // Add text above circles
-  const eventText = svg
-    .selectAll(".event-text")
-    .data(timelineData)
-    .enter()
-    .append("text")
-    .attr("x", (d) => xScale(d.year))
-    .attr("y", height / 2 - 180) // More space above circles
-    .attr("text-anchor", "middle")
-    .attr("font-size", "1.3em")
-    .attr("fill", "black")
-    .style("opacity", (d) => (d.izzyFight ? 1 : 0.3))
-    .text((d) => d.text)
-    .call(wrapText, 200); // Adjust wrap width for larger spacing
-
-  // Add hover effects with transitions
-  circles
-    .on("mouseover", function (event, d) {
-      if (d.izzyFight) {
-        // Highlight Izzy fight elements
-        circles.transition().duration(200).style("opacity", (data) => (data.izzyFight ? 1 : 0.3));
-        yearText.transition().duration(200).style("opacity", (data) => (data.izzyFight ? 1 : 0.3));
-        eventText.transition().duration(200).style("opacity", (data) => (data.izzyFight ? 1 : 0.3));
+    // Add hover effects with transitions
+    circles
+      .on("mouseover", function (event, d) {
+        if (d.izzyFight) {
+          // Highlight Izzy fight elements
+          circles.transition().duration(200).style("opacity", (data) => (data.izzyFight ? 1 : 0.3));
+          yearText.transition().duration(200).style("opacity", (data) => (data.izzyFight ? 1 : 0.3));
+          eventText.transition().duration(200).style("opacity", (data) => (data.izzyFight ? 1 : 0.3));
+          greenLine.transition().duration(200).style("opacity", 1);
+          yellowLines.forEach((line) => line.transition().duration(200).style("opacity", 0.3));
+          leftLine.transition().duration(200).style("opacity", 0.3);
+          rightLine.transition().duration(200).style("opacity", 0.3);
+        } else {
+          // Highlight non-Izzy fight elements
+          circles.transition().duration(200).style("opacity", (data) => (data === d ? 1 : 0.3));
+          yearText.transition().duration(200).style("opacity", (data) => (data === d ? 1 : 0.3));
+          eventText.transition().duration(200).style("opacity", (data) => (data === d ? 1 : 0.3));
+          yellowLines.forEach((line, i) => {
+            const related = timelineData[i] === d || timelineData[i + 1] === d;
+            line.transition().duration(200).style("opacity", related ? 1 : 0.3);
+          });
+          leftLine.transition().duration(200).style("opacity", d === timelineData[0] ? 1 : 0.3);
+          rightLine.transition().duration(200).style("opacity", d === timelineData[timelineData.length - 1] ? 1 : 0.3);
+          greenLine.transition().duration(200).style("opacity", 0.3);
+        }
+      })
+      .on("mouseout", function () {
+        // Reset opacity for all elements
+        circles.transition().duration(200).style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
+        yearText.transition().duration(200).style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
+        eventText.transition().duration(200).style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
         greenLine.transition().duration(200).style("opacity", 1);
         yellowLines.forEach((line) => line.transition().duration(200).style("opacity", 0.3));
         leftLine.transition().duration(200).style("opacity", 0.3);
         rightLine.transition().duration(200).style("opacity", 0.3);
-      } else {
-        // Highlight non-Izzy fight elements
-        circles.transition().duration(200).style("opacity", (data) => (data === d ? 1 : 0.3));
-        yearText.transition().duration(200).style("opacity", (data) => (data === d ? 1 : 0.3));
-        eventText.transition().duration(200).style("opacity", (data) => (data === d ? 1 : 0.3));
-        yellowLines.forEach((line, i) => {
-          const related = timelineData[i] === d || timelineData[i + 1] === d;
-          line.transition().duration(200).style("opacity", related ? 1 : 0.3);
-        });
-        leftLine.transition().duration(200).style("opacity", d === timelineData[0] ? 1 : 0.3);
-        rightLine.transition().duration(200).style("opacity", d === timelineData[timelineData.length - 1] ? 1 : 0.3);
-        greenLine.transition().duration(200).style("opacity", 0.3);
-      }
-    })
-    .on("mouseout", function () {
-      // Reset opacity for all elements
-      circles.transition().duration(200).style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
-      yearText.transition().duration(200).style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
-      eventText.transition().duration(200).style("opacity", (d) => (d.izzyFight ? 1 : 0.3));
-      greenLine.transition().duration(200).style("opacity", 1);
-      yellowLines.forEach((line) => line.transition().duration(200).style("opacity", 0.3));
-      leftLine.transition().duration(200).style("opacity", 0.3);
-      rightLine.transition().duration(200).style("opacity", 0.3);
-    });
+      });
+
+  }
 
   // Helper function to wrap text
   function wrapText(selection, width) {
@@ -197,6 +230,11 @@ async function drawTimeline() {
       }
     });
   }
+
+  draw();
+
+  // Redraw on window resize
+  window.addEventListener("resize", draw);
 }
 
 drawTimeline();

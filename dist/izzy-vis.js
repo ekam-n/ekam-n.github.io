@@ -68,7 +68,7 @@ async function drawVis() {
     // Add horizontal y-axis label above y-axis
     svgWins
       .append("text")
-      .attr("x", margin.left - "2rem")
+      .attr("x", margin.left - 32)
       .attr("y", margin.top - 20) // Positioned above the y-axis
       .attr("text-anchor", "start")
       .attr("font-size", "1.2em")
@@ -93,7 +93,7 @@ async function drawVis() {
     // Add horizontal y-axis label above y-axis
     svgFollowers
       .append("text")
-      .attr("x", margin.left - "2rem")
+      .attr("x", margin.left - 32)
       .attr("y", margin.top - 20) // Positioned above the y-axis
       .attr("text-anchor", "start")
       .attr("font-size", "1.2em")
