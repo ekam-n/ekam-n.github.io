@@ -19,18 +19,13 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
     const container = d3.select("#scatterplot");
     const containerWidth = container.node().clientWidth || width;
 
-    // Remove any existing SVG and tooltip
     container.selectAll("svg").remove();
     container.selectAll("div").remove();
 
-    // Determine chart width percentage based on container width
     let chartWidthPercentage = containerWidth < 700 ? "100%" : "75%";
-
-    // Check if the screen width is less than 500px
     const isSmallScreen = window.innerWidth < 500;
     const fontSize = isSmallScreen ? "16px" : "12px";
 
-    // Remove "Max Holloway" and "Stephen Thompson" below 500px
     const filteredFighterStats = isSmallScreen
       ? fighterStats.filter((d) => d.name !== "Max Holloway" && d.name !== "Stephen Thompson")
       : fighterStats;
@@ -54,43 +49,38 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
       .style("display", "block")
       .style("margin", "0 auto");
 
-    // Add X-axis
     svg
       .append("g")
       .attr("transform", `translate(0, ${height - margin.bottom})`)
       .call(d3.axisBottom(xScale).ticks(5))
       .selectAll("text")
       .attr("text-anchor", "middle")
-      .style("font-size", fontSize); // Update font size dynamically
+      .style("font-size", fontSize);
 
-    // X-axis label
     svg
       .append("text")
       .attr("x", width / 2)
       .attr("y", height - margin.bottom / 2 + 15)
       .attr("text-anchor", "middle")
-      .style("font-size", fontSize) // Update font size dynamically
+      .style("font-size", fontSize)
       .text("Strikes Attempted per Minute");
 
-    // Add Y-axis
     svg
       .append("g")
       .attr("transform", `translate(${margin.left}, 0)`)
       .call(d3.axisLeft(yScale).ticks(5))
       .selectAll("text")
-      .style("font-size", fontSize); // Update font size dynamically
+      .style("font-size", fontSize);
 
-    // Y-axis label
     svg
       .append("text")
       .attr("transform", "rotate(-90)")
       .attr("x", -(height / 2.25))
       .attr("y", margin.left / 2.25 - 15)
       .attr("text-anchor", "middle")
-      .style("font-size", fontSize) // Update font size dynamically
+      .style("font-size", fontSize)
       .text("Striking Accuracy (%)");
 
-    // Tooltip
     const tooltip = container
       .append("div")
       .style("position", "absolute")
@@ -98,77 +88,87 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
       .style("color", "white")
       .style("padding", "8px")
       .style("border-radius", "5px")
-      .style("font-size", fontSize) // Update font size dynamically
+      .style("font-size", fontSize)
       .style("display", "none")
       .style("pointer-events", "none");
 
-    // Add circles with tooltips and hover effects
-    svg
-      .selectAll("circle")
+    const fighterGroups = svg.selectAll(".fighter-group")
       .data(filteredFighterStats)
       .enter()
+      .append("g")
+      .attr("class", "fighter-group");
+
+    fighterGroups
       .append("circle")
       .attr("cx", (d) => xScale(d.strikesAttempted))
       .attr("cy", (d) => yScale(d.strikingAccuracy))
-      .attr("r", isSmallScreen ? 8 : 5) // Increase radius for smaller screens
-      .attr("fill", (d) => (d.name === "Alex Pereira" ? "#ebac00" : "rgba(210, 211, 210, 0.97)"))
-      .style("opacity", 0.97)
-      .on("mouseover", function (event, d) {
-        tooltip
-          .style("display", "block")
-          .html(
-            `<strong>${d.name}</strong><br>Strikes Attempted: ${d.strikesAttempted}<br>Striking Accuracy: ${d.strikingAccuracy}%`
-          );
+      .attr("r", isSmallScreen ? 8 : 5)
+      .attr("fill", "black")
+      .style("opacity", (d) => (d.name === "Alex Pereira" ? 1 : 0.3))
+      .on("mouseover", onHover)
+      .on("mousemove", onMove)
+      .on("mouseout", onMouseOut);
 
-        if (d.name !== "Alex Pereira") {
-          d3.select(this)
-            .transition()
-            .duration(300)
-            .attr("fill", "black")
-            .style("opacity", 1);
-        }
-      })
-      .on("mousemove", (event, d) => {
-        const tooltipWidth = 150; // Approximate width of tooltip
-        const tooltipDirection = d.strikesAttempted > 3 ? "left" : "right";
-        const xPosition = tooltipDirection === "left"
-          ? event.pageX - tooltipWidth - 10
-          : event.pageX + 10;
-        
-        tooltip
-          .style("left", `${xPosition}px`)
-          .style("top", `${event.pageY - 28}px`);
-      })
-      .on("mouseout", function (event, d) {
-        tooltip.style("display", "none");
-
-        d3.select(this)
-          .transition()
-          .duration(300)
-          .attr("fill", (d) => (d.name === "Alex Pereira" ? "#ebac00" : "rgba(210, 211, 210, 0.97)"))
-          .style("opacity", 0.97);
-      });
-
-    // Add labels to points
-    svg
-      .selectAll("text.label")
-      .data(filteredFighterStats)
-      .enter()
+    fighterGroups
       .append("text")
       .attr("x", (d) => xScale(d.strikesAttempted) + 8)
       .attr("y", (d) => yScale(d.strikingAccuracy) + 3)
-      .attr("font-size", isSmallScreen ? "14px" : "10px") // Update font size dynamically
+      .attr("font-size", isSmallScreen ? "14px" : "10px")
       .attr("fill", "#333")
-      .text((d) => {
-        // Extract last name if screen is small, otherwise use full name
-        return isSmallScreen ? d.name.split(" ").slice(-1)[0] : d.name;
-      })
-      .classed("label", true);
+      .style("opacity", (d) => (d.name === "Alex Pereira" ? 1 : 0.3))
+      .text((d) => isSmallScreen ? d.name.split(" ").slice(-1)[0] : d.name)
+      .on("mouseover", onHover)
+      .on("mousemove", onMove)
+      .on("mouseout", onMouseOut);
+
+    function onHover(event, d) {
+      tooltip
+        .style("display", "block")
+        .html(
+          `<strong>${d.name}</strong><br>Strikes Attempted: ${d.strikesAttempted}<br>Striking Accuracy: ${d.strikingAccuracy}%`
+        );
+
+      if (d.name !== "Alex Pereira") {
+        d3.select(this.parentNode).select("circle")
+          .transition()
+          .duration(300)
+          .style("opacity", 1);
+        
+        d3.select(this.parentNode).select("text")
+          .transition()
+          .duration(300)
+          .style("opacity", 1);
+      }
+    }
+
+    function onMove(event, d) {
+      const tooltipWidth = 150;
+      const tooltipDirection = d.strikesAttempted > 3 ? "left" : "right";
+      const xPosition = tooltipDirection === "left"
+        ? event.pageX - tooltipWidth - 10
+        : event.pageX + 10;
+      const yPosition = event.pageY - 28;
+
+      tooltip.style("left", `${xPosition}px`).style("top", `${yPosition}px`);
+    }
+
+    function onMouseOut(event, d) {
+      tooltip.style("display", "none");
+
+      if (d.name !== "Alex Pereira") {
+        d3.select(this.parentNode).select("circle")
+          .transition()
+          .duration(300)
+          .style("opacity", 0.3);
+
+        d3.select(this.parentNode).select("text")
+          .transition()
+          .duration(300)
+          .style("opacity", 0.3);
+      }
+    }
   }
 
-  // Initial draw
   drawChart();
-
-  // Add a resize event to redraw the chart
   window.addEventListener("resize", drawChart);
 })();
