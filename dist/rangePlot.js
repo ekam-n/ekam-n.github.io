@@ -111,7 +111,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
           .tickFormat("")
       )
       .style("stroke-dasharray", "2,2")
-      .style("opacity", 0.5);
+      .style("opacity", 0.25);
 
     // Add lines
     svg.selectAll(".line")
@@ -122,9 +122,9 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
       .attr("x2", (d) => xScale(formatToYearlessDate(d.third_defense)))
       .attr("y1", (d, i) => yScale(i) + yScale.bandwidth() / 2)
       .attr("y2", (d, i) => yScale(i) + yScale.bandwidth() / 2)
-      .attr("stroke", (d) => (d.fighter === "Alex Pereira" ? "#ebac00" : "#aaa"))
+      .attr("stroke", (d) => ("black"))
       .attr("stroke-width", lineThickness)
-      .style("opacity", (d) => (d.fighter === "Alex Pereira" ? 1 : 0.5))
+      .style("opacity", (d) => (d.fighter === "Alex Pereira" ? 1 : 0.3))
       .attr("class", (d) => (d.fighter === "Alex Pereira" ? "alex-line" : "other-line"));
 
     // Tooltip
@@ -153,8 +153,8 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
         .attr("cx", (d) => xScale(formatToYearlessDate(d[dataKey])))
         .attr("cy", (d, i) => yScale(i) + yScale.bandwidth() / 2)
         .attr("r", circleRadius)
-        .attr("fill", (d) => (d.fighter === "Alex Pereira" ? "#ebac00" : "#aaa"))
-        .style("opacity", (d) => (d.fighter === "Alex Pereira" ? 1 : 0.5))
+        .attr("fill", (d) => ("black"))
+        .style("opacity", (d) => (d.fighter === "Alex Pereira" ? 1 : 0.3))
         .attr("class", (d) => (d.fighter === "Alex Pereira" ? "alex-dot" : "other-dot"));
     };
 
@@ -170,8 +170,8 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
       .attr("y", (d, i) => yScale(i) + yScale.bandwidth() / 2 - 10)
       .attr("text-anchor", "middle")
       .attr("font-size", fontSize)
-      .attr("fill", (d) => (d.fighter === "Alex Pereira" ? "black" : "#aaa"))
-      .style("opacity", (d) => (d.fighter === "Alex Pereira" ? 1 : 0.5))
+      .attr("fill", (d) => ("black"))
+      .style("opacity", (d) => (d.fighter === "Alex Pereira" ? 1 : 0.3))
       .text((d) => d.fighter)
       .attr("class", "name-label")
       .on("mouseover", (event, d) => {
@@ -210,23 +210,23 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
           .filter((datum) => datum.fighter === d.fighter)
           .transition()
           .duration(300)
-          .style("opacity", 0.5)
-          .attr("stroke", "#aaa");
+          .style("opacity", 0.3)
+          .attr("stroke", "black");
 
         d3.selectAll(".other-dot")
           .filter((datum) => datum.fighter === d.fighter)
           .transition()
           .duration(300)
-          .style("opacity", 0.5)
-          .attr("fill", "#aaa");
+          .style("opacity", 0.3)
+          .attr("fill", "black");
 
         // Reset the text label of the fighter
         d3.selectAll(".name-label")
           .filter((datum) => datum.fighter === d.fighter)
           .transition()
           .duration(300)
-          .style("opacity", (datum) => (datum.fighter === "Alex Pereira" ? 1 : 0.5))
-          .style("fill", (datum) => (datum.fighter === "Alex Pereira" ? "black" : "#aaa"));
+          .style("opacity", (datum) => (datum.fighter === "Alex Pereira" ? 1 : 0.3))
+          .style("fill", (datum) => ("black"));
 
         tooltip.style("display", "none");
       });

@@ -38,7 +38,7 @@ function drawCharts() {
   const tooltip = d3.select("#pie-charts")
     .append("div")
     .style("position", "absolute")
-    .style("background-color", "rgba(0, 0, 0, 0.7)")
+    .style("background-color", "rgba(0, 0, 0, 0.5)")
     .style("color", "white")
     .style("padding", "5px")
     .style("border-radius", "4px")
@@ -66,7 +66,7 @@ function drawCharts() {
     const chartGroup = svgContainer.append("g")
       .attr("class", "fighter-group")
       .attr("transform", `translate(${xPosition}, ${yPosition})`)
-      .style("opacity", fighter.name === "Alex Pereira" ? 1 : 0.7); // Set opacity conditionally
+      .style("opacity", fighter.name === "Alex Pereira" ? 1 : 0.5); // Set opacity conditionally
 
     const pie = d3.pie().value(d => d.value);
     const arc = d3.arc().innerRadius(0).outerRadius(radius);
@@ -98,7 +98,7 @@ function drawCharts() {
         tooltip.style("display", "none");
 
         if (fighter.name !== "Alex Pereira") {
-          chartGroup.transition().duration(300).style("opacity", 0.7); // Reset opacity on mouse out
+          chartGroup.transition().duration(300).style("opacity", 0.5); // Reset opacity on mouse out
         }
       });
 
@@ -109,7 +109,7 @@ function drawCharts() {
       .attr("y", yPosition + height / 2 + namePadding)
       .attr("text-anchor", "middle")
       .style("font-size", "15px")
-      .style("opacity", fighter.name === "Alex Pereira" ? 1 : 0.7) 
+      .style("opacity", fighter.name === "Alex Pereira" ? 1 : 0.5) 
       .text(fighter.name);
 
     // Add hover interaction with transitions
@@ -121,7 +121,7 @@ function drawCharts() {
       })
       .on("mouseout", () => {
         if (fighter.name !== "Alex Pereira") {
-          chartGroup.transition().duration(300).style("opacity", 0.7);
+          chartGroup.transition().duration(300).style("opacity", 0.5);
         }
       });
   });
