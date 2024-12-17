@@ -72,14 +72,15 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
       .selectAll("text")
       .style("font-size", fontSize);
 
-    svg
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("x", -(height / 2.25))
-      .attr("y", margin.left / 2.25 - 15)
-      .attr("text-anchor", "middle")
-      .style("font-size", fontSize)
-      .text("Striking Accuracy (%)");
+    // Remove the rotated y-axis label and replace it with a horizontal label
+svg
+.append("text")
+.attr("x", margin.left - 50) // Position it slightly left of the y-axis
+.attr("y", margin.top - 20)  // Position it slightly above the top margin
+.attr("text-anchor", "start")
+.style("font-size", fontSize)
+.text("Striking Accuracy (%)");
+
 
     const tooltip = container
       .append("div")
