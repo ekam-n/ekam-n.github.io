@@ -70,21 +70,20 @@ async function drawVis() {
       .style("display", "none")
       .style("pointer-events", "none");
 
-    // Add Alex's bars with transitions
+    // Add Alex's bars
     rounds
       .append("rect")
       .attr("x", xScale(0))
       .attr("y", yScale.bandwidth() / barHeightFactor)
       .attr("width", (d) => xScale(d.alex_strikes) - xScale(0))
       .attr("height", barHeight)
-      .attr("fill", (d) => (d.round === 5 ? "#ebac00" : "lightgray"))
+      .attr("fill", "#ebac00")
       .attr("opacity", (d) => (d.round === 5 ? 1 : 0.3))
       .on("mouseover", function (event, d) {
         d3.select(this)
           .transition()
           .duration(300)
-          .attr("fill", "#ffcc00")
-          .attr("opacity", 1);
+          .style("opacity", 1);
 
         tooltip
           .style("display", "block")
@@ -99,27 +98,25 @@ async function drawVis() {
         d3.select(this)
           .transition()
           .duration(300)
-          .attr("fill", d.round === 5 ? "#ebac00" : "lightgray")
-          .attr("opacity", d.round === 5 ? 1 : 0.3);
+          .style("opacity", d.round === 5 ? 1 : 0.3);
 
         tooltip.style("display", "none");
       });
 
-    // Add Izzy's bars with transitions
+    // Add Izzy's bars
     rounds
       .append("rect")
       .attr("x", xScale(0))
       .attr("y", (yScale.bandwidth() / barHeightFactor) * 2)
       .attr("width", (d) => xScale(d.izzy_strikes) - xScale(0))
       .attr("height", barHeight)
-      .attr("fill", (d) => (d.round === 5 ? "green" : "#a9a9a9"))
+      .attr("fill", "#008000")
       .attr("opacity", (d) => (d.round === 5 ? 1 : 0.3))
       .on("mouseover", function (event, d) {
         d3.select(this)
           .transition()
           .duration(300)
-          .attr("fill", "#00cc44")
-          .attr("opacity", 1);
+          .style("opacity", 1);
 
         tooltip
           .style("display", "block")
@@ -134,8 +131,7 @@ async function drawVis() {
         d3.select(this)
           .transition()
           .duration(300)
-          .attr("fill", d.round === 5 ? "green" : "#a9a9a9")
-          .attr("opacity", d.round === 5 ? 1 : 0.3);
+          .style("opacity", d.round === 5 ? 1 : 0.3);
 
         tooltip.style("display", "none");
       });
