@@ -103,27 +103,30 @@ function drawCharts() {
       });
 
     // Add fighter name below each pie chart with padding
-    svgContainer.append("text")
-      .attr("class", "fighter-name")
-      .attr("x", xPosition)
-      .attr("y", yPosition + height / 2 + namePadding)
-      .attr("text-anchor", "middle")
-      .style("font-size", "15px")
-      .style("opacity", fighter.name === "Alex Pereira" ? 1 : 0.5) 
-      .text(fighter.name);
+const fighterName = svgContainer.append("text")
+.attr("class", "fighter-name")
+.attr("x", xPosition)
+.attr("y", yPosition + height / 2 + namePadding)
+.attr("text-anchor", "middle")
+.style("font-size", "15px")
+.style("opacity", fighter.name === "Alex Pereira" ? 1 : 0.5) 
+.text(fighter.name);
 
-    // Add hover interaction with transitions
-    chartGroup
-      .on("mouseover", () => {
-        if (fighter.name !== "Alex Pereira") {
-          chartGroup.transition().duration(300).style("opacity", 1);
-        }
-      })
-      .on("mouseout", () => {
-        if (fighter.name !== "Alex Pereira") {
-          chartGroup.transition().duration(300).style("opacity", 0.5);
-        }
-      });
+// Add hover interaction with transitions for pie chart
+chartGroup
+.on("mouseover", () => {
+  if (fighter.name !== "Alex Pereira") {
+    chartGroup.transition().duration(300).style("opacity", 1);
+  }
+  fighterName.transition().duration(300).style("opacity", 1);
+})
+.on("mouseout", () => {
+  if (fighter.name !== "Alex Pereira") {
+    chartGroup.transition().duration(300).style("opacity", 0.5);
+  }
+  fighterName.transition().duration(300).style("opacity", fighter.name === "Alex Pereira" ? 1 : 0.5);
+});
+
   });
 }
 
