@@ -76,7 +76,7 @@ async function drawVis() {
       .attr("text-anchor", "start")
       .attr("font-size", "1.2em")
       .attr("fill", "black")
-      .text("Cumulative Wins");
+      .text("Cumulative MMA Wins");
 
     // Axes for followers
     svgFollowers
