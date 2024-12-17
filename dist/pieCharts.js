@@ -46,9 +46,9 @@ function drawCharts() {
     .style("display", "none")
     .style("pointer-events", "none");
 
-  // Colors
-  const defaultColor = d3.scaleOrdinal(["#5e5e5e", "rgba(210, 211, 210, 0.95)"]); // Dark grey and light grey for others
-  const alexColor = d3.scaleOrdinal(["#ebac00", "rgba(210, 211, 210, 0.5)"]); // Yellow and 50% grey for Alex
+  // Colors 
+  const blackColor = "#000000"; // Fully black for "Knockouts"
+  const greyColor = "rgba(210, 211, 210, 0.95)"; // Light grey for "Other Wins"
 
   fighters.forEach((fighter, index) => {
     const data = [
@@ -66,52 +66,41 @@ function drawCharts() {
     const chartGroup = svgContainer.append("g")
       .attr("class", "fighter-group")
       .attr("transform", `translate(${xPosition}, ${yPosition})`)
-      .style("opacity", fighter.name === "Alex Pereira" ? 1 : 0.5); // Set opacity conditionally
+      .style("opacity", fighter.name === "Alex Pereira" ? 1 : 0.7); // Set opacity conditionally
 
     const pie = d3.pie().value(d => d.value);
     const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
     const pieSlices = chartGroup.selectAll("path")
-    .data(pie(data))
-    .enter()
-    .append("path")
-    .attr("d", arc)
-    .attr("fill", (d, i) => {
-      return fighter.name === "Alex Pereira" ? alexColor(i) : defaultColor(i);
-    })
-    .on("mouseover", (event, d) => {
-      tooltip
-        .style("display", "block")
-        .html(`<strong>${d.data.type}:</strong> ${d.data.value}`)
-        .style("left", `${event.pageX + 10}px`)
-        .style("top", `${event.pageY + 10}px`);
+      .data(pie(data))
+      .enter()
+      .append("path")
+      .attr("d", arc)
+      .attr("fill", (d, i) => i === 0 ? blackColor : greyColor) // Black for "Knockouts", grey for "Other Wins"
+      .style("opacity", 1) // Ensure that individual slices are at full opacity within the chart
+      .on("mouseover", (event, d) => {
+        tooltip
+          .style("display", "block")
+          .html(`<strong>${d.data.type}:</strong> ${d.data.value}`)
+          .style("left", `${event.pageX + 10}px`)
+          .style("top", `${event.pageY + 10}px`);
 
-      if (d.data.type === "Knockouts" && fighter.name !== "Alex Pereira") {
-        pieSlices
-          .filter((_, i) => i === 0)
-          .transition()
-          .duration(300)
-          .attr("fill", "black")
-          .style("opacity", 1);
-      }
-    })
-    .on("mousemove", (event) => {
-      tooltip
-        .style("left", `${event.pageX + 10}px`)
-        .style("top", `${event.pageY + 10}px`);
-    })
-    .on("mouseout", () => {
-      tooltip.style("display", "none");
+        if (fighter.name !== "Alex Pereira") {
+          chartGroup.transition().duration(300).style("opacity", 1); // Increase opacity on hover for non-Alex fighters
+        }
+      })
+      .on("mousemove", (event) => {
+        tooltip
+          .style("left", `${event.pageX + 10}px`)
+          .style("top", `${event.pageY + 10}px`);
+      })
+      .on("mouseout", (event) => {
+        tooltip.style("display", "none");
 
-      if (fighter.name !== "Alex Pereira") {
-        pieSlices
-          .filter((_, i) => i === 0)
-          .transition()
-          .duration(300)
-          .attr("fill", defaultColor(0))
-          .style("opacity", 0.5);
-      }
-    });
+        if (fighter.name !== "Alex Pereira") {
+          chartGroup.transition().duration(300).style("opacity", 0.7); // Reset opacity on mouse out
+        }
+      });
 
     // Add fighter name below each pie chart with padding
     svgContainer.append("text")
@@ -120,7 +109,7 @@ function drawCharts() {
       .attr("y", yPosition + height / 2 + namePadding)
       .attr("text-anchor", "middle")
       .style("font-size", "15px")
-      .style("opacity", fighter.name === "Alex Pereira" ? 1 : 0.5) 
+      .style("opacity", fighter.name === "Alex Pereira" ? 1 : 0.7) 
       .text(fighter.name);
 
     // Add hover interaction with transitions
@@ -132,7 +121,7 @@ function drawCharts() {
       })
       .on("mouseout", () => {
         if (fighter.name !== "Alex Pereira") {
-          chartGroup.transition().duration(300).style("opacity", 0.5);
+          chartGroup.transition().duration(300).style("opacity", 0.7);
         }
       });
   });
